@@ -23,6 +23,14 @@ public class ColdRoom {
         this.minAllowed = minAllowed;
         this.maxAllowed = maxAllowed;
     }
+    public Double getMinAllowed() {
+    return minAllowed;
+}
+
+public Double getMaxAllowed() {
+    return maxAllowed;
+}
+
 
     // getters & setters
 }

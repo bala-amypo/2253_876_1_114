@@ -1,14 +1,66 @@
-package com.example.demo.service;
+package com.example.demo.entity;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
-import com.example.demo.entity.TokenLog;
+@Entity
+@Table(name = "token_logs")
+public class TokenLog {
 
-public interface TokenLogService {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Get all logs for a token
-    List<TokenLog> getLogs(Long tokenId);
+    @ManyToOne
+    @JoinColumn(name = "token_id")
+    private Token token;     // ✔️ Changed BreachAlert → Token
 
-    // Create and save a log message
-    TokenLog saveLog(Long tokenId, String message);
+    private String logMessage;
+
+    private LocalDateTime loggedAt;
+
+    public TokenLog() {}
+
+    public TokenLog(Token token,
+                    String logMessage,
+                    LocalDateTime loggedAt) {
+        this.token = token;
+        this.logMessage = logMessage;
+        this.loggedAt = loggedAt;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        if (loggedAt == null) {
+            loggedAt = LocalDateTime.now();
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public LocalDateTime getLoggedAt() {
+        return loggedAt;
+    }
+
+    public void setToken(Token token) {
+        this.token = token;
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+    }
+
+    public void setLoggedAt(LocalDateTime loggedAt) {
+        this.loggedAt = loggedAt;
+    }
 }

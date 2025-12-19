@@ -31,24 +31,24 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
         this.coldRoomRepository = coldRoomRepository;
     }
 
-    @Override
-    public TemperatureReading saveReading(Long sensorId, Long coldRoomId, Double value) {
+   @Override
+public TemperatureReading saveReading(String deviceId, Double value) {
 
-        SensorDevice sensor = sensorRepository.findById(sensorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sensor not found"));
+    SensorDevice sensor = sensorRepository.findByIdentifier(deviceId)
+            .orElseThrow(() -> new ResourceNotFoundException("Sensor not found"));
 
-        ColdRoom coldRoom = coldRoomRepository.findById(coldRoomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cold room not found"));
+    ColdRoom coldRoom = sensor.getColdRoom();
 
-        TemperatureReading reading = new TemperatureReading(
-                sensor,
-                coldRoom,
-                value,
-                LocalDateTime.now()
-        );
+    TemperatureReading reading = new TemperatureReading(
+            sensor,
+            coldRoom,
+            value,
+            LocalDateTime.now()
+    );
 
-        return temperatureReadingRepository.save(reading);
-    }
+    return temperatureReadingRepository.save(reading);
+}
+
 
     // ✅ This is the missing method
     @Override

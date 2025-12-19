@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.TemperatureReading;
@@ -20,10 +19,12 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
     }
 
     @Override
-    public TemperatureReading saveReading(TemperatureReading reading) {
+    public TemperatureReading saveReading(String deviceId, Double value) {
 
-        // Set created time if needed
-        reading.setTimestamp(LocalDateTime.now());
+        TemperatureReading reading = new TemperatureReading();
+        reading.setDeviceId(deviceId);
+        reading.setValue(value);
+        reading.setReadingTime(LocalDateTime.now());
 
         return temperatureRepository.save(reading);
     }

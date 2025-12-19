@@ -17,12 +17,16 @@ public class TokenLogServiceImpl implements TokenLogService {
 
     private final TokenLogRepository logRepository;
     private final TokenRepository tokenRepository;
+  
+
 
     public TokenLogServiceImpl(TokenLogRepository logRepository,
                                TokenRepository tokenRepository) {
         this.logRepository = logRepository;
         this.tokenRepository = tokenRepository;
     }
+}
+
 
     @Override
     public TokenLog addLog(Long tokenId, String message) {

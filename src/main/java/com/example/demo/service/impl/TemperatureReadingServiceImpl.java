@@ -13,6 +13,7 @@ import com.example.demo.repository.ColdRoomRepository;
 import com.example.demo.repository.SensorDeviceRepository;
 
 
+
 import com.example.demo.repository.TemperatureReadingRepository;
 import com.example.demo.service.TemperatureReadingService;
 

@@ -27,14 +27,24 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
 
     private final ColdRoomRepository coldRoomRepository;
 
+    // public TemperatureReadingServiceImpl(
+    //         TemperatureReadingRepository temperatureRepository,
+    //         SensorRepository sensorRepository,
+    //         ColdRoomRepository coldRoomRepository) {
+    //     this.temperatureRepository = temperatureRepository;
+    //     this.sensorRepository = sensorRepository;
+    //     this.coldRoomRepository = coldRoomRepository;
+    // }
     public TemperatureReadingServiceImpl(
-            TemperatureReadingRepository temperatureRepository,
-            SensorRepository sensorRepository,
-            ColdRoomRepository coldRoomRepository) {
-        this.temperatureRepository = temperatureRepository;
-        this.sensorRepository = sensorRepository;
-        this.coldRoomRepository = coldRoomRepository;
-    }
+        SensorDeviceRepository sensorRepository,
+        ColdRoomRepository coldRoomRepository,
+        TemperatureReadingRepository temperatureReadingRepository
+) {
+    this.sensorRepository = sensorRepository;
+    this.coldRoomRepository = coldRoomRepository;
+    this.temperatureReadingRepository = temperatureReadingRepository;
+}
+
 
     @Override
     public TemperatureReading saveReading(String sensorId, Double value) {

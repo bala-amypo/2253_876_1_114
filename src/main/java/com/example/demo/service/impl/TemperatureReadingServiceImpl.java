@@ -36,8 +36,9 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
     @Override
     public TemperatureReading saveReading(String sensorId, Double value) {
 
-        SensorDevice sensor = sensorRepository.findById(sensorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sensor not found"));
+       SensorDevice sensor = sensorRepository.findById(Long.valueOf(deviceId))
+        .orElseThrow(() -> new ResourceNotFoundException("Sensor not found"));
+
 
         ColdRoom coldRoom = sensor.getColdRoom();
 

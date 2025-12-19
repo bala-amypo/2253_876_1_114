@@ -22,6 +22,8 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
 
     private final TemperatureReadingRepository temperatureRepository;
     private final SensorDeviceRepository sensorRepository;
+ 
+
 
     private final ColdRoomRepository coldRoomRepository;
 

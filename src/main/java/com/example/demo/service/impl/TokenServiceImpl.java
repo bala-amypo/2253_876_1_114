@@ -1,106 +1,87 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.BreachAlert;
-import com.example.demo.entity.QueuePosition;
-import com.example.demo.entity.TemperatureReading;
+import com.example.demo.entity.Queue;
+import com.example.demo.entity.Token;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.QueuePositionRepository;
+import com.example.demo.repository.QueueRepository;
 import com.example.demo.repository.TokenRepository;
+import com.example.demo.service.TokenLogService;
 import com.example.demo.service.TokenService;
 
 @Service
 public class TokenServiceImpl implements TokenService {
 
     private final TokenRepository tokenRepository;
-    private final QueuePositionRepository queueRepository;
+    private final QueueRepository queueRepository;
+    private final TokenLogService tokenLogService;
 
     public TokenServiceImpl(TokenRepository tokenRepository,
-                            QueuePositionRepository queueRepository) {
+                            QueueRepository queueRepository,
+                            TokenLogService tokenLogService) {
+
         this.tokenRepository = tokenRepository;
         this.queueRepository = queueRepository;
+        this.tokenLogService = tokenLogService;
     }
 
+    // ================= CREATE TOKEN =====================
     @Override
-    public BreachAlert createBreachAlert(TemperatureReading reading,
-                                         String breachType) {
+    public Token createToken(Long queueId) {
 
-        String tokenNumber = UUID.randomUUID().toString();
+        Queue queue = queueRepository.findById(queueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Queue not found"));
 
-        BreachAlert alert = new BreachAlert(
-                tokenNumber,
-                reading.getColdRoom(),
-                reading.getSensor(),
-                reading,
-                "OPEN",
-                breachType,
-                LocalDateTime.now(),
-                null
-        );
+        Token token = new Token();
+        token.setQueue(queue);
+        token.setStatus("PENDING");
+        token.setCreatedAt(LocalDateTime.now());
 
-        tokenRepository.save(alert);
+        Token saved = tokenRepository.save(token);
 
-        // ✅ Create queue position
-        QueuePosition queue = new QueuePosition(
-                alert,
-                1,
-                LocalDateTime.now()
-        );
-        queueRepository.save(queue);
+        // LOG
+        tokenLogService.addLog(saved.getId(), "Token Created");
 
-        return alert;
+        return saved;
     }
 
+    // ================= GET ALL TOKENS =====================
     @Override
-    public BreachAlert updateStatus(Long tokenId, String newStatus) {
-
-        BreachAlert alert = tokenRepository.findById(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Token not found"));
-
-        String oldStatus = alert.getStatus();
-
-        // ✅ Status transition validation
-        if (!isValidTransition(oldStatus, newStatus)) {
-            throw new IllegalArgumentException("Invalid status transition");
-        }
-
-        alert.setStatus(newStatus);
-
-        // ✅ Terminal states
-        if (newStatus.equals("RESOLVED")
-                || newStatus.equals("CANCELLED")) {
-            alert.setResolvedAt(LocalDateTime.now());
-        }
-
-        return tokenRepository.save(alert);
+    public List<Token> getTokens() {
+        return tokenRepository.findAll();
     }
 
+    // ================= UPDATE STATUS =====================
     @Override
-    public BreachAlert getToken(Long tokenId) {
-        return tokenRepository.findById(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Token not found"));
+    public Token updateStatus(Long tokenId, String status) {
+
+        Token token = tokenRepository.findById(tokenId)
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+
+        token.setStatus(status);
+        Token saved = tokenRepository.save(token);
+
+        // LOG
+        tokenLogService.addLog(saved.getId(),
+                "Token status changed to " + saved.getStatus());
+
+        return saved;
     }
 
-    // ✅ Allowed transitions
-    private boolean isValidTransition(String oldStatus,
-                                      String newStatus) {
+    // ================= DELETE TOKEN =====================
+    @Override
+    public void deleteToken(Long id) {
 
-        if (oldStatus.equals("OPEN")) {
-            return newStatus.equals("ACKNOWLEDGED")
-                    || newStatus.equals("CANCELLED");
-        }
+        Token token = tokenRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
-        if (oldStatus.equals("ACKNOWLEDGED")) {
-            return newStatus.equals("RESOLVED")
-                    || newStatus.equals("CANCELLED");
-        }
+        tokenRepository.delete(token);
 
-        return false;
+        // LOG
+        tokenLogService.addLog(id, "Token Deleted");
     }
 }

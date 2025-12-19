@@ -49,6 +49,16 @@ public TemperatureReading saveReading(String deviceId, Double value) {
 
     return temperatureReadingRepository.save(reading);
 }
+@Override
+public TemperatureReading getReading(Long id) {
+    return temperatureReadingRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Reading not found"));
+}
+
+@Override
+public List<TemperatureReading> getAllReadings() {
+    return temperatureReadingRepository.findAll();
+}
 
 
     // ✅ This is the missing method

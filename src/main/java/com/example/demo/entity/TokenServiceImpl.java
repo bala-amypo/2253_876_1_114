@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-
-
-import com.example.demo.entity.Queue;
+import com.example.demo.entity.QueuePosition;
 import com.example.demo.entity.Token;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.QueueRepository;
+import com.example.demo.repository.QueuePositionRepository;
 import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.TokenLogService;
 import com.example.demo.service.TokenService;
@@ -19,45 +17,47 @@ import com.example.demo.service.TokenService;
 public class TokenServiceImpl implements TokenService {
 
     private final TokenRepository tokenRepository;
-    private final QueueRepository queueRepository;
+    private final QueuePositionRepository queuePositionRepository;
     private final TokenLogService tokenLogService;
 
     public TokenServiceImpl(TokenRepository tokenRepository,
-                            QueueRepository queueRepository,
+                            QueuePositionRepository queuePositionRepository,
                             TokenLogService tokenLogService) {
 
         this.tokenRepository = tokenRepository;
-        this.queueRepository = queueRepository;
+        this.queuePositionRepository = queuePositionRepository;
         this.tokenLogService = tokenLogService;
     }
 
-    // ================= CREATE TOKEN =====================
     @Override
-    public Token createToken(Long queueId) {
+    public Token createToken(Long queuePositionId) {
 
-        Queue queue = queueRepository.findById(queueId)
-                .orElseThrow(() -> new ResourceNotFoundException("Queue not found"));
+        QueuePosition queuePosition = queuePositionRepository.findById(queuePositionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Queue Position not found"));
 
         Token token = new Token();
-        token.setQueue(queue);
+        token.setQueuePosition(queuePosition);
         token.setStatus("PENDING");
         token.setCreatedAt(LocalDateTime.now());
 
         Token saved = tokenRepository.save(token);
 
-        // LOG
         tokenLogService.addLog(saved.getId(), "Token Created");
 
         return saved;
     }
 
-    // ================= GET ALL TOKENS =====================
+    @Override
+    public Token getToken(Long id) {
+        return tokenRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+    }
+
     @Override
     public List<Token> getTokens() {
         return tokenRepository.findAll();
     }
 
-    // ================= UPDATE STATUS =====================
     @Override
     public Token updateStatus(Long tokenId, String status) {
 
@@ -65,16 +65,15 @@ public class TokenServiceImpl implements TokenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
         token.setStatus(status);
+
         Token saved = tokenRepository.save(token);
 
-        // LOG
         tokenLogService.addLog(saved.getId(),
                 "Token status changed to " + saved.getStatus());
 
         return saved;
     }
 
-    // ================= DELETE TOKEN =====================
     @Override
     public void deleteToken(Long id) {
 
@@ -83,7 +82,6 @@ public class TokenServiceImpl implements TokenService {
 
         tokenRepository.delete(token);
 
-        // LOG
         tokenLogService.addLog(id, "Token Deleted");
     }
 }

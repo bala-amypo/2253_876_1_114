@@ -3,8 +3,9 @@ package com.example.demo.service.impl;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
+import com.example.demo.entity.Token;
+import com.example.demo.entity.Queue;
 
-import com.example.demo.entity.BreachAlert;
 import com.example.demo.entity.QueuePosition;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.QueuePositionRepository;

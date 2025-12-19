@@ -30,6 +30,7 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
         this.sensorRepository = sensorRepository;
         this.coldRoomRepository = coldRoomRepository;
     }
+    
 
    @Override
 public TemperatureReading saveReading(String deviceId, Double value) {

@@ -43,4 +43,10 @@ public class TokenLogServiceImpl implements TokenLogService {
 
         return tokenLogRepository.save(log);
     }
+
+    // ✅ This is the correct place
+    @Override
+    public TokenLog addLog(Long tokenId, String message) {
+        return saveLog(tokenId, message);
+    }
 }

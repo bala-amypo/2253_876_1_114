@@ -1,77 +1,41 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.BreachAlert;
-import com.example.demo.entity.ColdRoom;
-import com.example.demo.entity.SensorDevice;
 import com.example.demo.entity.TemperatureReading;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TemperatureReadingRepository;
-import com.example.demo.service.SensorService;
 import com.example.demo.service.TemperatureReadingService;
-import com.example.demo.service.TokenService;
 
 @Service
-public class TemperatureReadingServiceImpl
-        implements TemperatureReadingService {
+public class TemperatureReadingServiceImpl implements TemperatureReadingService {
 
-    private final TemperatureReadingRepository readingRepository;
-    private final SensorService sensorService;
-    private final TokenService tokenService;
+    private final TemperatureReadingRepository temperatureRepository;
 
-    public TemperatureReadingServiceImpl(
-            TemperatureReadingRepository readingRepository,
-            SensorService sensorService,
-            TokenService tokenService) {
-
-        this.readingRepository = readingRepository;
-        this.sensorService = sensorService;
-        this.tokenService = tokenService;
+    public TemperatureReadingServiceImpl(TemperatureReadingRepository temperatureRepository) {
+        this.temperatureRepository = temperatureRepository;
     }
 
     @Override
-    public TemperatureReading saveReading(String sensorIdentifier,
-                                          Double readingValue) {
+    public TemperatureReading saveReading(TemperatureReading reading) {
 
-        SensorDevice sensor = sensorService.getByIdentifier(sensorIdentifier);
+        // Set created time if needed
+        reading.setTimestamp(LocalDateTime.now());
 
-        // ✅ Sensor active check
-        if (!Boolean.TRUE.equals(sensor.getIsActive())) {
-            throw new IllegalArgumentException("Sensor not active");
-        }
+        return temperatureRepository.save(reading);
+    }
 
-        // ✅ Reading validation
-        if (readingValue == null || readingValue < -100 || readingValue > 200) {
-            throw new IllegalArgumentException("Invalid reading");
-        }
+    @Override
+    public TemperatureReading getReading(Long id) {
+        return temperatureRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Temperature Reading not found"));
+    }
 
-        ColdRoom coldRoom = sensor.getColdRoom();
-
-        TemperatureReading reading = new TemperatureReading(
-                sensor,
-                coldRoom,
-                readingValue,
-                LocalDateTime.now()
-        );
-
-        readingRepository.save(reading);
-
-        // ✅ BREACH CHECK (AUTO ALERT)
-        if (readingValue < coldRoom.getMinAllowed()) {
-            tokenService.createBreachAlert(
-                    reading,
-                    "LOW"
-            );
-        } else if (readingValue > coldRoom.getMaxAllowed()) {
-            tokenService.createBreachAlert(
-                    reading,
-                    "HIGH"
-            );
-        }
-
-        return reading;
+    @Override
+    public List<TemperatureReading> getAllReadings() {
+        return temperatureRepository.findAll();
     }
 }

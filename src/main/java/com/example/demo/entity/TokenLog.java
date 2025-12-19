@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -14,18 +13,15 @@ public class TokenLog {
 
     @ManyToOne
     @JoinColumn(name = "token_id")
-    private BreachAlert token;
+    private Token token;     // ✔️ Changed BreachAlert → Token
 
     private String logMessage;
 
     private LocalDateTime loggedAt;
 
-    // ✅ No-arg constructor
-    public TokenLog() {
-    }
+    public TokenLog() {}
 
-    // ✅ Parameterized constructor (required)
-    public TokenLog(BreachAlert token,
+    public TokenLog(Token token,
                     String logMessage,
                     LocalDateTime loggedAt) {
         this.token = token;
@@ -33,7 +29,6 @@ public class TokenLog {
         this.loggedAt = loggedAt;
     }
 
-    // Auto set time
     @PrePersist
     public void onCreate() {
         if (loggedAt == null) {
@@ -41,12 +36,11 @@ public class TokenLog {
         }
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
 
-    public BreachAlert getToken() {
+    public Token getToken() {
         return token;
     }
 
@@ -58,11 +52,15 @@ public class TokenLog {
         return loggedAt;
     }
 
-    public void setToken(BreachAlert token) {
+    public void setToken(Token token) {
         this.token = token;
     }
 
     public void setLogMessage(String logMessage) {
         this.logMessage = logMessage;
+    }
+
+    public void setLoggedAt(LocalDateTime loggedAt) {
+        this.loggedAt = loggedAt;
     }
 }

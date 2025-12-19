@@ -1,66 +1,14 @@
-package com.example.demo.entity;
+package com.example.demo.service;
 
-import java.time.LocalDateTime;
-import jakarta.persistence.*;
+import java.util.List;
 
-@Entity
-@Table(name = "token_logs")
-public class TokenLog {
+import com.example.demo.entity.TokenLog;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public interface TokenLogService {
 
-    @ManyToOne
-    @JoinColumn(name = "token_id")
-    private Token token;     // ✔️ Changed BreachAlert → Token
+    // Get all logs for a token
+    List<TokenLog> getLogs(Long tokenId);
 
-    private String logMessage;
-
-    private LocalDateTime loggedAt;
-
-    public TokenLog() {}
-
-    public TokenLog(Token token,
-                    String logMessage,
-                    LocalDateTime loggedAt) {
-        this.token = token;
-        this.logMessage = logMessage;
-        this.loggedAt = loggedAt;
-    }
-
-    @PrePersist
-    public void onCreate() {
-        if (loggedAt == null) {
-            loggedAt = LocalDateTime.now();
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Token getToken() {
-        return token;
-    }
-
-    public String getLogMessage() {
-        return logMessage;
-    }
-
-    public LocalDateTime getLoggedAt() {
-        return loggedAt;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
-    public void setLogMessage(String logMessage) {
-        this.logMessage = logMessage;
-    }
-
-    public void setLoggedAt(LocalDateTime loggedAt) {
-        this.loggedAt = loggedAt;
-    }
+    // Create and save a log message
+    TokenLog saveLog(Long tokenId, String message);
 }

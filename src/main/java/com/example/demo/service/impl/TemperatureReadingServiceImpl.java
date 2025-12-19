@@ -10,7 +10,8 @@ import com.example.demo.entity.SensorDevice;
 import com.example.demo.entity.TemperatureReading;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ColdRoomRepository;
-import com.example.demo.repository.SensorRepository;
+import com.example.demo.repository.SensorDeviceRepository;
+
 import com.example.demo.repository.TemperatureReadingRepository;
 import com.example.demo.service.TemperatureReadingService;
 
@@ -18,7 +19,8 @@ import com.example.demo.service.TemperatureReadingService;
 public class TemperatureReadingServiceImpl implements TemperatureReadingService {
 
     private final TemperatureReadingRepository temperatureRepository;
-    private final SensorRepository sensorRepository;
+    private final SensorDeviceRepository sensorRepository;
+
     private final ColdRoomRepository coldRoomRepository;
 
     public TemperatureReadingServiceImpl(

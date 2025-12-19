@@ -61,12 +61,12 @@ public List<TemperatureReading> getAllReadings() {
 }
 
 
-    // ✅ This is the missing method
-    @Override
-    public TemperatureReading getReading(Long id) {
-        return temperatureReadingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reading not found"));
-    }
+ 
+    // @Override
+    // public TemperatureReading getReading(Long id) {
+    //     return temperatureReadingRepository.findById(id)
+    //             .orElseThrow(() -> new ResourceNotFoundException("Reading not found"));
+    // }
 
     // @Override
     // public List<TemperatureReading> getAllReadings() {

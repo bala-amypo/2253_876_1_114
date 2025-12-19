@@ -18,7 +18,6 @@ public class TokenLogServiceImpl implements TokenLogService {
     private final TokenLogRepository logRepository;
     private final TokenRepository tokenRepository;
 
-
     public TokenLogServiceImpl(TokenLogRepository logRepository,
                                TokenRepository tokenRepository) {
         this.logRepository = logRepository;
@@ -26,28 +25,21 @@ public class TokenLogServiceImpl implements TokenLogService {
     }
 
     @Override
-    public TokenLog addLog(Long tokenId, String message) {
+    public TokenLog createLog(Long tokenId, String action) {
 
-        BreachAlert token = tokenRepository.findById(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Token not found"));
+        Token token = tokenRepository.findById(tokenId)
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
-        TokenLog log = new TokenLog(
-                token,
-                message,
-                LocalDateTime.now()
-        );
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setAction(action);
+        log.setCreatedAt(LocalDateTime.now());
 
         return logRepository.save(log);
     }
 
     @Override
-    public List<TokenLog> getLogs(Long tokenId) {
-
-        tokenRepository.findById(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Token not found"));
-
-        return logRepository.findByTokenIdOrderByLoggedAtAsc(tokenId);
+    public List<TokenLog> getLogs() {
+        return logRepository.findAll();
     }
 }

@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.TemperatureReading;
 
-public interface TemperatureReadingRepository
-        extends JpaRepository<TemperatureReading, Long> {
+// public interface TemperatureReadingRepository
+//         extends JpaRepository<TemperatureReading, Long> {
 
-    List<TemperatureReading> findByColdRoomId(Long coldRoomId);
+//     List<TemperatureReading> findByColdRoomId(Long coldRoomId);
+// }
+@Repository
+public interface TemperatureReadingRepository extends JpaRepository<TemperatureReading, Long> {
 }

@@ -12,15 +12,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    http
-   .csrf(csrf -> csrf.disable())
-   .authorizeHttpRequests(auth -> auth
-        .requestMatchers(
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/v3/api-docs.yaml",
-            "/auth/**"
-        ).permitAll()
-        .anyRequest().authenticated()
-   );
+  
 }

@@ -15,31 +15,32 @@ import com.example.demo.service.TokenLogService;
 @Service
 public class TokenLogServiceImpl implements TokenLogService {
 
-    private final TokenLogRepository logRepository;
+    private final TokenLogRepository tokenLogRepository;
     private final TokenRepository tokenRepository;
 
-    public TokenLogServiceImpl(TokenLogRepository logRepository,
+    public TokenLogServiceImpl(TokenLogRepository tokenLogRepository,
                                TokenRepository tokenRepository) {
-        this.logRepository = logRepository;
+        this.tokenLogRepository = tokenLogRepository;
         this.tokenRepository = tokenRepository;
     }
 
     @Override
-    public TokenLog createLog(Long tokenId, String action) {
+    public List<TokenLog> getLogs(Long tokenId) {
+        return tokenLogRepository.findByTokenId(tokenId);
+    }
+
+    @Override
+    public TokenLog saveLog(Long tokenId, String message) {
 
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
-        TokenLog log = new TokenLog();
-        log.setToken(token);
-        log.setAction(action);
-        log.setCreatedAt(LocalDateTime.now());
+        TokenLog log = new TokenLog(
+                token,
+                message,
+                LocalDateTime.now()
+        );
 
-        return logRepository.save(log);
-    }
-
-    @Override
-    public List<TokenLog> getLogs() {
-        return logRepository.findAll();
+        return tokenLogRepository.save(log);
     }
 }

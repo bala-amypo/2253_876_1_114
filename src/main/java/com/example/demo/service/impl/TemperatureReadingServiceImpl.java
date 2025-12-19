@@ -57,10 +57,10 @@ public class TemperatureReadingServiceImpl implements TemperatureReadingService 
                 .orElseThrow(() -> new ResourceNotFoundException("Reading not found"));
     }
 
-    @Override
-    public List<TemperatureReading> getAllReadings() {
-        return temperatureReadingRepository.findAll();
-    }
+    // @Override
+    // public List<TemperatureReading> getAllReadings() {
+    //     return temperatureReadingRepository.findAll();
+    // }
 
   
 }

@@ -1,60 +1,83 @@
-package com.example.demo.service.impl;
+package com.example.demo.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import org.springframework.stereotype.Service;
+import jakarta.persistence.*;
 
-import com.example.demo.entity.ColdRoom;
-import com.example.demo.entity.SensorDevice;
-import com.example.demo.entity.TemperatureReading;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ColdRoomRepository;
-import com.example.demo.repository.SensorRepository;
-import com.example.demo.repository.TemperatureReadingRepository;
-import com.example.demo.service.TemperatureReadingService;
+@Entity
+@Table(name = "temperature_readings")
+public class TemperatureReading {
 
-@Service
-public class TemperatureReadingServiceImpl implements TemperatureReadingService {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final TemperatureReadingRepository temperatureRepository;
-    private final SensorRepository sensorRepository;
-    private final ColdRoomRepository coldRoomRepository;
+    @ManyToOne
+    @JoinColumn(name = "sensor_id")
+    private SensorDevice sensor;
 
-    public TemperatureReadingServiceImpl(
-            TemperatureReadingRepository temperatureRepository,
-            SensorRepository sensorRepository,
-            ColdRoomRepository coldRoomRepository) {
-        this.temperatureRepository = temperatureRepository;
-        this.sensorRepository = sensorRepository;
-        this.coldRoomRepository = coldRoomRepository;
+    @ManyToOne
+    @JoinColumn(name = "cold_room_id")
+    private ColdRoom coldRoom;
+
+    private Double readingValue;
+
+    private LocalDateTime recordedAt;
+
+    // ✅ No-arg constructor
+    public TemperatureReading() {
     }
 
-    @Override
-    public TemperatureReading saveReading(String sensorId, Double value) {
-
-        SensorDevice sensor = sensorRepository.findById(sensorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sensor not found"));
-
-        ColdRoom coldRoom = sensor.getColdRoom();
-
-        TemperatureReading reading = new TemperatureReading();
-        reading.setSensor(sensor);
-        reading.setColdRoom(coldRoom);
-        reading.setReadingValue(value);
-        reading.setRecordedAt(LocalDateTime.now());
-
-        return temperatureRepository.save(reading);
+    // ✅ Parameterized constructor (required by test)
+    public TemperatureReading(SensorDevice sensor,
+                              ColdRoom coldRoom,
+                              Double readingValue,
+                              LocalDateTime recordedAt) {
+        this.sensor = sensor;
+        this.coldRoom = coldRoom;
+        this.readingValue = readingValue;
+        this.recordedAt = recordedAt;
     }
 
-    @Override
-    public TemperatureReading getReading(Long id) {
-        return temperatureRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Temperature Reading not found"));
+    // ✅ Getters and setters
+
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public List<TemperatureReading> getAllReadings() {
-        return temperatureRepository.findAll();
+    public SensorDevice getSensor() {
+        return sensor;
+    }
+
+    public ColdRoom getColdRoom() {
+        return coldRoom;
+    }
+
+    public Double getReadingValue() {
+        return readingValue;
+    }
+
+    public LocalDateTime getRecordedAt() {
+        return recordedAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSensor(SensorDevice sensor) {
+        this.sensor = sensor;
+    }
+
+    public void setColdRoom(ColdRoom coldRoom) {
+        this.coldRoom = coldRoom;
+    }
+
+    public void setReadingValue(Double readingValue) {
+        this.readingValue = readingValue;
+    }
+
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt;
     }
 }

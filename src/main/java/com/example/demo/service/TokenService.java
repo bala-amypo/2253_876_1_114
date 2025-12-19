@@ -1,14 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.BreachAlert;
-import com.example.demo.entity.TemperatureReading;
+import com.example.demo.entity.Token;
+import java.util.List;
 
 public interface TokenService {
 
-    BreachAlert createBreachAlert(TemperatureReading reading,
-                                  String breachType);
+    Token createToken(Long queuePositionId);
 
-    BreachAlert updateStatus(Long tokenId, String newStatus);
+    Token getToken(Long id);
 
-    BreachAlert getToken(Long tokenId);
+    List<Token> getAllTokens();
+
+    Token updateStatus(Long id, String status);
+
+    void deleteToken(Long id);
 }

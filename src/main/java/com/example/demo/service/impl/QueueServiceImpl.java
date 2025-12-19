@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Token;
@@ -23,22 +24,20 @@ public class QueueServiceImpl implements QueueService {
     }
 
     @Override
-    public QueuePosition updateQueuePosition(Long tokenId,
-                                             Integer newPosition) {
+    public QueuePosition updateQueuePosition(Long tokenId, Integer newPosition) {
 
         if (newPosition < 1) {
             throw new IllegalArgumentException("Position must be >= 1");
         }
 
-        // ✅ FIXED — Now using Token instead of BreachAlert
         Token token = tokenRepository.findById(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Token not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
 
         QueuePosition queue = queueRepository
                 .findByTokenId(tokenId)
-                .orElse(new QueuePosition(token, newPosition, LocalDateTime.now()));
+                .orElse(new QueuePosition());
 
+        queue.setToken(token);
         queue.setPosition(newPosition);
         queue.setUpdatedAt(LocalDateTime.now());
 
@@ -47,7 +46,6 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public QueuePosition getPosition(Long tokenId) {
-
         return queueRepository.findByTokenId(tokenId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Queue not found"));

@@ -1,53 +1,35 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.Token;
 import com.example.demo.entity.QueuePosition;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.QueuePositionRepository;
-import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.QueueService;
+import org.springframework.stereotype.Service;
 
 @Service
 public class QueueServiceImpl implements QueueService {
 
     private final QueuePositionRepository queueRepository;
-    private final TokenRepository tokenRepository;
 
-    public QueueServiceImpl(QueuePositionRepository queueRepository,
-                            TokenRepository tokenRepository) {
+    public QueueServiceImpl(QueuePositionRepository queueRepository) {
         this.queueRepository = queueRepository;
-        this.tokenRepository = tokenRepository;
     }
 
     @Override
     public QueuePosition updateQueuePosition(Long tokenId, Integer newPosition) {
 
-        if (newPosition < 1) {
-            throw new IllegalArgumentException("Position must be >= 1");
-        }
-
-        Token token = tokenRepository.findById(tokenId)
-                .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
-
-        QueuePosition queue = queueRepository
+        QueuePosition position = queueRepository
                 .findByTokenId(tokenId)
-                .orElse(new QueuePosition());
+                .orElse(new QueuePosition(tokenId, newPosition));
 
-        queue.setToken(token);
-        queue.setPosition(newPosition);
-        queue.setUpdatedAt(LocalDateTime.now());
+        position.setPosition(newPosition);
 
-        return queueRepository.save(queue);
+        return queueRepository.save(position);
     }
 
     @Override
     public QueuePosition getPosition(Long tokenId) {
         return queueRepository.findByTokenId(tokenId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Queue not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Queue position not found"));
     }
 }

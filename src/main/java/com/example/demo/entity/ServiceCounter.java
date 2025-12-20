@@ -1,20 +1,24 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "service_counters")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ServiceCounter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String counterName;
 
-    private Boolean active;
+    private String department;
 
-    public ServiceCounter() {}
-    
-    // getters + setters
+    @Column(name = "active")
+    private Boolean isActive;
 }

@@ -1,6 +1,12 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.Token;
+import com.example.demo.service.TokenService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/tokens")
-@Tag(name = "Token Controller")
 public class TokenController {
 
     private final TokenService tokenService;
@@ -15,8 +21,10 @@ public class TokenController {
     }
 
     @PutMapping("/status/{tokenId}")
-    public ResponseEntity<Token> updateStatus(@PathVariable Long tokenId,
-                                              @RequestParam String status) {
+    public ResponseEntity<Token> updateStatus(
+            @PathVariable Long tokenId,
+            @RequestParam String status) {
+
         return ResponseEntity.ok(tokenService.updateStatus(tokenId, status));
     }
 

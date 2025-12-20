@@ -1,21 +1,29 @@
+package com.example.demo.controller;
+
+import com.example.demo.entity.ServiceCounter;
+import com.example.demo.service.ServiceCounterService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/counters")
-@Tag(name = "Service Counter Controller")
 public class ServiceCounterController {
 
-    private final ServiceCounterService service;
+    private final ServiceCounterService serviceCounterService;
 
-    public ServiceCounterController(ServiceCounterService service) {
-        this.service = service;
+    public ServiceCounterController(ServiceCounterService serviceCounterService) {
+        this.serviceCounterService = serviceCounterService;
     }
 
     @PostMapping("/add")
     public ResponseEntity<ServiceCounter> addCounter(@RequestBody ServiceCounter counter) {
-        return ResponseEntity.ok(service.addCounter(counter));
+        return ResponseEntity.ok(serviceCounterService.addCounter(counter));
     }
 
     @GetMapping("/active")
     public ResponseEntity<List<ServiceCounter>> getActiveCounters() {
-        return ResponseEntity.ok(service.getActiveCounters());
+        return ResponseEntity.ok(serviceCounterService.getActiveCounters());
     }
 }

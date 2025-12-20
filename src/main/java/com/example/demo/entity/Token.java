@@ -1,7 +1,5 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,41 +10,27 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Token belongs to a Queue Position
-    @ManyToOne
-    @JoinColumn(name = "queue_position_id")
-    private QueuePosition queuePosition;
+    private Long serviceCounterId;
 
-    private String status;
+    private String status; // e.g., "ISSUED", "SERVED"
 
-    private LocalDateTime createdAt;
+    public Token() {}
 
-    public Token() {
-    }
-
-    public Token(QueuePosition queuePosition, String status, LocalDateTime createdAt) {
-        this.queuePosition = queuePosition;
+    public Token(Long serviceCounterId, String status) {
+        this.serviceCounterId = serviceCounterId;
         this.status = status;
-        this.createdAt = createdAt;
-    }
-
-    @PrePersist
-    public void onCreate() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
     }
 
     public Long getId() {
         return id;
     }
 
-    public QueuePosition getQueuePosition() {
-        return queuePosition;
+    public Long getServiceCounterId() {
+        return serviceCounterId;
     }
 
-    public void setQueuePosition(QueuePosition queuePosition) {
-        this.queuePosition = queuePosition;
+    public void setServiceCounterId(Long serviceCounterId) {
+        this.serviceCounterId = serviceCounterId;
     }
 
     public String getStatus() {
@@ -55,9 +39,5 @@ public class Token {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

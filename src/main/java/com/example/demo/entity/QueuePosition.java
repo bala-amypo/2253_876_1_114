@@ -1,7 +1,5 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,53 +10,34 @@ public class QueuePosition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "token_id")
-    private Token token;   // ✔️ CHANGED BreachAlert → Token
+    private Long tokenId;
 
     private Integer position;
 
-    private LocalDateTime updatedAt;
-
     public QueuePosition() {}
 
-    public QueuePosition(Token token,
-                         Integer position,
-                         LocalDateTime updatedAt) {
-        this.token = token;
+    public QueuePosition(Long tokenId, Integer position) {
+        this.tokenId = tokenId;
         this.position = position;
-        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Token getToken() {
-        return token;
+    public Long getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(Long tokenId) {
+        this.tokenId = tokenId;
     }
 
     public Integer getPosition() {
         return position;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
     public void setPosition(Integer position) {
         this.position = position;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

@@ -10,11 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.CorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -39,45 +34,29 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+
+                        // ---------- WHITELIST (PUBLIC) ----------
                         .requestMatchers(
                                 "/auth/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs.yaml"
+                                "/v3/api-docs.yaml",
+                                "/actuator/**"
                         ).permitAll()
+
+                        // ---------- SECURED ----------
                         .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        
-        config.setAllowedOrigins(
-                List.of(
-                        "https://9023.pro604cr.amypo.ai",
-                        "https://*"
-                )
-        );
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
 }

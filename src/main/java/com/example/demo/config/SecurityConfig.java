@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.demo.config.JwtAuthenticationEntry;
+import com.example.demo.config.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,101 +12,55 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtFilter;
-    private final JwtAuthenticationEntryPoint entryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationEntry jwtAuthenticationEntry;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtFilter,
-                          JwtAuthenticationEntryPoint entryPoint) {
-        this.jwtFilter = jwtFilter;
-        this.entryPoint = entryPoint;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
+                          JwtAuthenticationEntry jwtAuthenticationEntry) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtAuthenticationEntry = jwtAuthenticationEntry;
     }
 
-    // 🔐 Password encoder
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    // 🔐 Authentication manager
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+        http.csrf(csrf -> csrf.disable())
 
-    // 🔐 Main security configuration
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthenticationEntry))
 
-        http
-            // ✅ ENABLE CORS (Swagger fix)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            // ✅ DISABLE CSRF (Stateless JWT)
-            .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/",
+                                "/error",
+                                "/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                );
 
-            // ✅ HANDLE UNAUTHORIZED ACCESS
-            .exceptionHandling(ex ->
-                    ex.authenticationEntryPoint(entryPoint))
-
-            // ✅ STATELESS SESSION
-            .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            // ✅ AUTHORIZATION RULES
-            .authorizeHttpRequests(auth -> auth
-
-                // ---------- WHITELIST (PUBLIC) ----------
-                .requestMatchers(
-                        "/",
-                        "/error",
-                        "/favicon.ico",
-
-                        // Auth APIs
-                        "/auth/**",
-
-                        // Swagger / OpenAPI
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs/**",
-                        "/v3/api-docs.yaml"
-                ).permitAll()
-
-                // ---------- PROTECTED APIs ----------
-                .anyRequest().authenticated()
-            );
-
-        // ✅ JWT FILTER
-        http.addFilterBefore(jwtFilter,
-                UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // 🌐 CORS CONFIGURATION
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(false);
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

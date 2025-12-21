@@ -1,56 +1,34 @@
-package com.example.demo.service.impl;
+@Override
+public AuthResponse register(RegisterRequest request) {
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+    // create user entity and save
+    // assuming you already have User entity + repository
 
-import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
+    // Example basic logic (adjust to your DB fields):
+    User user = new User();
+    user.setUsername(request.getUsername());
+    user.setPassword(passwordEncoder.encode(request.getPassword()));
+    user.setEmail(request.getEmail());
+    user.setRole(request.getRole());
 
-@Service
-public class UserServiceImpl implements UserService {
+    userRepository.save(user);
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    // generate token
+    String token = jwtService.generateToken(user.getUsername());
 
-    // ✅ Constructor injection (MANDATORY)
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    return new AuthResponse(token);
+}
 
-    @Override
-    public User registerUser(User user) {
+@Override
+public AuthResponse login(AuthRequest request) {
 
-        // ✅ Duplicate email check
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
+    authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                    request.getUsername(), request.getPassword()
+            )
+    );
 
-        // ✅ Default role
-        if (user.getRole() == null) {
-            user.setRole("STAFF");
-        }
+    String token = jwtService.generateToken(request.getUsername());
 
-        // ✅ Encrypt password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
-    }
+    return new AuthResponse(token);
 }

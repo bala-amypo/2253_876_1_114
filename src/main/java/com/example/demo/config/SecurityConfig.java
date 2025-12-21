@@ -22,46 +22,32 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
-
-                        // Allow home + error
                         .requestMatchers("/", "/error").permitAll()
-
-                        // Allow Authentication APIs
                         .requestMatchers("/auth/**").permitAll()
-
-                        // Allow Swagger
-                        .requestMatchers(
-                                "/swagger-ui/**",
+                        .requestMatchers("/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/swagger-ui/index.html",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-
-                        // Everything else requires login
+                                "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

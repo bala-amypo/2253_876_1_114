@@ -16,15 +16,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()       // <-- ALLOW EVERYTHING
                 )
-                .formLogin(login -> login.disable()) // disable default login page
-                .httpBasic(httpBasic -> httpBasic.disable()); // disable basic auth
+                .formLogin(login -> login.disable())
+                .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
     }

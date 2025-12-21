@@ -1,20 +1,18 @@
-package com.example.demo.controller;
+package com.example.demo.dto;
 
-public class JwtResponse {
+public class AuthResponse {
 
     private String token;
 
-    public JwtResponse() {
-    }
+    public AuthResponse() {}
 
-    public JwtResponse(String token) {
+    public AuthResponse(String token) {
         this.token = token;
     }
 
     public String getToken() {
         return token;
     }
-
     public void setToken(String token) {
         this.token = token;
     }

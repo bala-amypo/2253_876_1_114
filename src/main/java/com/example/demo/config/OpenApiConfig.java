@@ -1,21 +1,30 @@
 package com.example.demo.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
-public class OpenApiConfig {
+public class OpenApiSecurityConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .servers(List.of(
-                        new Server().url("https://9023.pro604cr.amypo.ai"),
-                        new Server().url("http://9023.pro604cr.amypo.ai")
-                ));
+                .info(new Info()
+                        .title("Digital Queue Management System")
+                        .version("1.0")
+                        .description("API Documentation"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new io.swagger.v3.oas.models.Components()
+                        .addSecurityScheme("bearerAuth",
+                                new SecurityScheme()
+                                        .name("Authorization")
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .in(SecurityScheme.In.HEADER)));
     }
 }

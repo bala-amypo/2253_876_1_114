@@ -1,14 +1,13 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Id

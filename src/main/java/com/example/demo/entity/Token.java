@@ -12,7 +12,7 @@ public class Token {
 
     private Long serviceCounterId;
 
-    private String status; // e.g., "ISSUED", "SERVED"
+    private String status; // ISSUED, SERVED and all details 
 
     public Token() {}
 

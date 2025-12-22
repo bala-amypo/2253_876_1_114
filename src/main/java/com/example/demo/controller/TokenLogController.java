@@ -18,13 +18,11 @@ public class TokenLogController {
         this.tokenLogService = tokenLogService;
     }
 
-    // ✅ Get all logs of a token (required in testcases)
     @GetMapping("/{tokenId}/logs")
     public ResponseEntity<List<TokenLog>> getLogs(@PathVariable Long tokenId) {
         return ResponseEntity.ok(tokenLogService.getLogs(tokenId));
     }
 
-    // ✅ Optional : Add log manually if test requires
     @PostMapping("/{tokenId}/logs")
     public ResponseEntity<TokenLog> addLog(
             @PathVariable Long tokenId,

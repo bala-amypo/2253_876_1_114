@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
-~
 import java.util.Arrays;
 
 @Configuration
@@ -35,12 +34,9 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntry))
-
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
@@ -58,11 +54,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ⭐ IMPORTANT → allows Swagger + Remote Domain
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
+        // Allows the specific frontend domains
         config.setAllowedOrigins(Arrays.asList(
                 "https://9023.pro604cr.amypo.ai",
                 "http://9023.pro604cr.amypo.ai"

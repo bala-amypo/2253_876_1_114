@@ -13,7 +13,7 @@ public class TokenLog {
 
     @ManyToOne
     @JoinColumn(name = "token_id")
-    private Token token;     // ✔️ Changed BreachAlert → Token
+    private Token token;    
 
     private String logMessage;
 

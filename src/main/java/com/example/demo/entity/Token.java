@@ -1,43 +1,34 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tokens")
+@Table(name = "tokens", uniqueConstraints = @UniqueConstraint(columnNames = "tokenNumber"))
 public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long serviceCounterId;
+    private String tokenNumber;
 
-    private String status; // ISSUED, SERVED and all details 
+    @ManyToOne
+    private ServiceCounter serviceCounter;
+
+    private String status;
+
+    private LocalDateTime issuedAt;
+    private LocalDateTime completedAt;
 
     public Token() {}
 
-    public Token(Long serviceCounterId, String status) {
-        this.serviceCounterId = serviceCounterId;
+    public Token(String tokenNumber, ServiceCounter serviceCounter, String status, LocalDateTime issuedAt) {
+        this.tokenNumber = tokenNumber;
+        this.serviceCounter = serviceCounter;
         this.status = status;
+        this.issuedAt = issuedAt;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getServiceCounterId() {
-        return serviceCounterId;
-    }
-
-    public void setServiceCounterId(Long serviceCounterId) {
-        this.serviceCounterId = serviceCounterId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    // getters & setters
 }

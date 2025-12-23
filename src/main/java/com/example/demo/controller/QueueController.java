@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.QueuePosition;
 import com.example.demo.service.QueueService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/queue")
+@Tag(name = "Queue")
 public class QueueController {
 
     private final QueueService queueService;
@@ -16,15 +18,16 @@ public class QueueController {
     }
 
     @PutMapping("/position/{tokenId}/{newPosition}")
-    public ResponseEntity<QueuePosition> updatePosition(
+    @Operation(summary = "Update queue position")
+    public QueuePosition updatePosition(
             @PathVariable Long tokenId,
             @PathVariable Integer newPosition) {
-
-        return ResponseEntity.ok(queueService.updateQueuePosition(tokenId, newPosition));
+        return queueService.updateQueuePosition(tokenId, newPosition);
     }
 
     @GetMapping("/position/{tokenId}")
-    public ResponseEntity<QueuePosition> getPosition(@PathVariable Long tokenId) {
-        return ResponseEntity.ok(queueService.getPosition(tokenId));
+    @Operation(summary = "Get queue position")
+    public QueuePosition getPosition(@PathVariable Long tokenId) {
+        return queueService.getPosition(tokenId);
     }
 }

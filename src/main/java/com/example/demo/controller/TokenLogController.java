@@ -1,15 +1,16 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.TokenLog;
 import com.example.demo.service.TokenLogService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/tokens")
+@RequestMapping("/logs")
+@Tag(name = "Token Logs")
 public class TokenLogController {
 
     private final TokenLogService tokenLogService;
@@ -18,16 +19,17 @@ public class TokenLogController {
         this.tokenLogService = tokenLogService;
     }
 
-    @GetMapping("/{tokenId}/logs")
-    public ResponseEntity<List<TokenLog>> getLogs(@PathVariable Long tokenId) {
-        return ResponseEntity.ok(tokenLogService.getLogs(tokenId));
-    }
-
-    @PostMapping("/{tokenId}/logs")
-    public ResponseEntity<TokenLog> addLog(
+    @PostMapping("/{tokenId}")
+    @Operation(summary = "Add token log")
+    public TokenLog addLog(
             @PathVariable Long tokenId,
             @RequestBody String message) {
+        return tokenLogService.addLog(tokenId, message);
+    }
 
-        return ResponseEntity.ok(tokenLogService.addLog(tokenId, message));
+    @GetMapping("/{tokenId}")
+    @Operation(summary = "Get token logs")
+    public List<TokenLog> getLogs(@PathVariable Long tokenId) {
+        return tokenLogService.getLogs(tokenId);
     }
 }

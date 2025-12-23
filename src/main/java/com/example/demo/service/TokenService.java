@@ -1,13 +1,10 @@
-package com.example.demo.service;
-
-import com.example.demo.entity.Token;
-
-public interface TokenService {
-
-    Token issueToken(Long serviceCounterId);
-
-    Token updateStatus(Long tokenId, String status);
-
-    Token getToken(Long tokenId);
+public TokenServiceImpl(
+        TokenRepository tokenRepository,
+        ServiceCounterRepository serviceCounterRepository,
+        TokenLogRepository tokenLogRepository,
+        QueuePositionRepository queuePositionRepository) {
+    this.tokenRepository = tokenRepository;
+    this.serviceCounterRepository = serviceCounterRepository;
+    this.tokenLogRepository = tokenLogRepository;
+    this.queuePositionRepository = queuePositionRepository;
 }
-

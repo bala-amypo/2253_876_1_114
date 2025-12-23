@@ -29,4 +29,12 @@ public class UserServiceImpl implements UserService {
 
     // ✅ REQUIRED BY TEST FILE
     public User register(User user) {
-        return registerUser(u
+        return registerUser(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+}

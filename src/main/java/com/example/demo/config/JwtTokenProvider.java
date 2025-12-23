@@ -3,6 +3,7 @@ package com.example.demo.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.JwtException;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -25,6 +26,8 @@ public class JwtTokenProvider {
         this.validityInMs = validityInMs;
     }
 
+    // ================= TOKEN CREATION =================
+
     public String generateToken(Long userId, String email, String role) {
 
         Map<String, Object> claims = new HashMap<>();
@@ -40,14 +43,29 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getEmailFromToken(String token) {
-        return getAllClaims(token).getSubject();
+    // ================= REQUIRED BY FILTER =================
+
+    // ✅ USED BY JwtAuthenticationFilter
+    public boolean validateToken(String token) {
+        try {
+            getClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    private Claims getAllClaims(String token) {
+    // ✅ USED BY JwtAuthenticationFilter
+    public Claims getClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    // ================= OPTIONAL HELPERS =================
+
+    public String getEmailFromToken(String token) {
+        return getClaims(token).getSubject();
     }
 }

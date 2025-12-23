@@ -1,43 +1,51 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "queue_positions")
 public class QueuePosition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long tokenId;
+    @OneToOne
+    private Token token;
 
     private Integer position;
 
+    private LocalDateTime updatedAt;
+
     public QueuePosition() {}
 
-    public QueuePosition(Long tokenId, Integer position) {
-        this.tokenId = tokenId;
+    public QueuePosition(Token token, Integer position, LocalDateTime updatedAt) {
+        this.token = token;
         this.position = position;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Long getTokenId() {
-        return tokenId;
-    }
-
-    public void setTokenId(Long tokenId) {
-        this.tokenId = tokenId;
+    public Token getToken() {
+        return token;
     }
 
     public Integer getPosition() {
         return position;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

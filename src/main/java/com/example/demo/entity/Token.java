@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tokens", uniqueConstraints = @UniqueConstraint(columnNames = "tokenNumber"))
+@Table(
+        name = "tokens",
+        uniqueConstraints = @UniqueConstraint(columnNames = "tokenNumber")
+)
 public class Token {
 
     @Id
@@ -19,6 +22,7 @@ public class Token {
     private String status;
 
     private LocalDateTime issuedAt;
+
     private LocalDateTime completedAt;
 
     public Token() {}
@@ -30,5 +34,35 @@ public class Token {
         this.issuedAt = issuedAt;
     }
 
-    // getters & setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getTokenNumber() {
+        return tokenNumber;
+    }
+
+    public ServiceCounter getServiceCounter() {
+        return serviceCounter;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
 }

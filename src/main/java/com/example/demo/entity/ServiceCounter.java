@@ -21,5 +21,19 @@ public class ServiceCounter {
         this.isActive = isActive;
     }
 
-    // getters & setters
+    public Long getId() {
+        return id;
+    }
+
+    public String getCounterName() {
+        return counterName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
 }

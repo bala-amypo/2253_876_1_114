@@ -1,10 +1,9 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "token_logs")
 public class TokenLog {
 
     @Id
@@ -12,28 +11,22 @@ public class TokenLog {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "token_id")
-    private Token token;    
+    private Token token;
 
     private String logMessage;
 
     private LocalDateTime loggedAt;
 
-    public TokenLog() {}
-
-    public TokenLog(Token token,
-                    String logMessage,
-                    LocalDateTime loggedAt) {
-        this.token = token;
-        this.logMessage = logMessage;
-        this.loggedAt = loggedAt;
-    }
-
     @PrePersist
     public void onCreate() {
-        if (loggedAt == null) {
-            loggedAt = LocalDateTime.now();
-        }
+        loggedAt = LocalDateTime.now();
+    }
+
+    public TokenLog() {}
+
+    public TokenLog(Token token, String logMessage) {
+        this.token = token;
+        this.logMessage = logMessage;
     }
 
     public Long getId() {
@@ -50,17 +43,5 @@ public class TokenLog {
 
     public LocalDateTime getLoggedAt() {
         return loggedAt;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
-    }
-
-    public void setLogMessage(String logMessage) {
-        this.logMessage = logMessage;
-    }
-
-    public void setLoggedAt(LocalDateTime loggedAt) {
-        this.loggedAt = loggedAt;
     }
 }

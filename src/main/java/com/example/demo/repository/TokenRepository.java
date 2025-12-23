@@ -1,8 +1,7 @@
-public interface TokenRepository
-        extends JpaRepository<Token, Long> {
+package com.example.demo.repository;
 
-    List<Token> findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(
-            Long counterId, String status);
+import com.example.demo.entity.Token;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    Optional<Token> findByTokenNumber(String tokenNumber);
+public interface TokenRepository extends JpaRepository<Token, Long> {
 }

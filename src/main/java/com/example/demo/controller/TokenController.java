@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Token;
 import com.example.demo.service.TokenService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tokens")
+@Tag(name = "Tokens")
 public class TokenController {
 
     private final TokenService tokenService;
@@ -16,20 +18,22 @@ public class TokenController {
     }
 
     @PostMapping("/issue/{counterId}")
-    public ResponseEntity<Token> issueToken(@PathVariable Long counterId) {
-        return ResponseEntity.ok(tokenService.issueToken(counterId));
+    @Operation(summary = "Issue new token")
+    public Token issueToken(@PathVariable Long counterId) {
+        return tokenService.issueToken(counterId);
     }
 
     @PutMapping("/status/{tokenId}")
-    public ResponseEntity<Token> updateStatus(
+    @Operation(summary = "Update token status")
+    public Token updateStatus(
             @PathVariable Long tokenId,
             @RequestParam String status) {
-
-        return ResponseEntity.ok(tokenService.updateStatus(tokenId, status));
+        return tokenService.updateStatus(tokenId, status);
     }
 
     @GetMapping("/{tokenId}")
-    public ResponseEntity<Token> getToken(@PathVariable Long tokenId) {
-        return ResponseEntity.ok(tokenService.getToken(tokenId));
+    @Operation(summary = "Get token details")
+    public Token getToken(@PathVariable Long tokenId) {
+        return tokenService.getToken(tokenId);
     }
 }

@@ -1,16 +1,16 @@
 package com.example.demo.util;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TokenNumberGenerator {
 
-    private static final AtomicLong counter = new AtomicLong(1);
+    private static final AtomicInteger counter = new AtomicInteger(1000);
 
     private TokenNumberGenerator() {
-        // utility class → no objects allowed
+        // utility class
     }
 
-    public static Long generateTokenNumber() {
-        return counter.getAndIncrement();
+    public static String generateTokenNumber() {
+        return "T" + counter.incrementAndGet();
     }
 }

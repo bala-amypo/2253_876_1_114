@@ -17,9 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /**
-     * Main security filter chain
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -29,12 +26,19 @@ public class SecurityConfig {
             .httpBasic(basic -> basic.disable())
 
             .authorizeHttpRequests(auth -> auth
+                // ✅ allow root & swagger
                 .requestMatchers(
+                    "/",
+                    "/index.html",
                     "/auth/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
-                    "/v3/api-docs/**"
+                    "/v3/api-docs/**",
+                    "/swagger-resources/**",
+                    "/webjars/**"
                 ).permitAll()
+
+                // everything else secured
                 .anyRequest().authenticated()
             )
 
@@ -45,9 +49,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Password encoder for BCrypt hashing
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -55,7 +56,6 @@ public class SecurityConfig {
 
     /**
      * REQUIRED for Spring Boot 3+
-     * Fixes: AuthenticationManager bean not found
      */
     @Bean
     public AuthenticationManager authenticationManager(

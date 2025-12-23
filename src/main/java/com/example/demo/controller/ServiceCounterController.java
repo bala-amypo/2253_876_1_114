@@ -2,13 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ServiceCounter;
 import com.example.demo.service.ServiceCounterService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/counters")
+@Tag(name = "Service Counters")
 public class ServiceCounterController {
 
     private final ServiceCounterService serviceCounterService;
@@ -17,13 +19,15 @@ public class ServiceCounterController {
         this.serviceCounterService = serviceCounterService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ServiceCounter> addCounter(@RequestBody ServiceCounter counter) {
-        return ResponseEntity.ok(serviceCounterService.addCounter(counter));
+    @PostMapping
+    @Operation(summary = "Add service counter")
+    public ServiceCounter addCounter(@RequestBody ServiceCounter counter) {
+        return serviceCounterService.addCounter(counter);
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<ServiceCounter>> getActiveCounters() {
-        return ResponseEntity.ok(serviceCounterService.getActiveCounters());
+    @Operation(summary = "Get active counters")
+    public List<ServiceCounter> getActiveCounters() {
+        return serviceCounterService.getActiveCounters();
     }
 }

@@ -35,4 +35,5 @@ public class Token {
     public void setStatus(String status) { this.status = status; }
     public void setServiceCounter(ServiceCounter serviceCounter) { this.serviceCounter = serviceCounter; }
     public void setIssuedAt(LocalDateTime issuedAt) { this.issuedAt = issuedAt; }
-    public void setCompletedAt(Lo
+    public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
+}

@@ -15,25 +15,15 @@ public class ServiceCounter {
 
     public ServiceCounter() {}
 
-    public ServiceCounter(String counterName, String department, Boolean isActive) {
-        this.counterName = counterName;
-        this.department = department;
-        this.isActive = isActive;
-    }
+    // ✅ GETTERS
+    public Long getId() { return id; }
+    public String getCounterName() { return counterName; }
+    public String getDepartment() { return department; }
+    public Boolean getIsActive() { return isActive; }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getCounterName() {
-        return counterName;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
+    // ✅ SETTERS REQUIRED BY TEST
+    public void setId(Long id) { this.id = id; }
+    public void setCounterName(String counterName) { this.counterName = counterName; }
+    public void setDepartment(String department) { this.department = department; }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 }

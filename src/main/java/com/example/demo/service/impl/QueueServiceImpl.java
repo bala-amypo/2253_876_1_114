@@ -44,17 +44,41 @@
 //     }
 // }
 
-public QueuePosition updateQueuePosition(Long tokenId, int position) {
-    if (position < 1) {
-        throw new IllegalArgumentException("Position must be >= 1");
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.QueuePosition;
+import com.example.demo.entity.Token;
+import com.example.demo.repository.QueuePositionRepository;
+import com.example.demo.repository.TokenRepository;
+
+public class QueueServiceImpl {
+
+    private final QueuePositionRepository queueRepo;
+    private final TokenRepository tokenRepository;
+
+    public QueueServiceImpl(QueuePositionRepository queueRepo,
+                            TokenRepository tokenRepository) {
+        this.queueRepo = queueRepo;
+        this.tokenRepository = tokenRepository;
     }
 
-    Token token = tokenRepository.findById(tokenId)
-            .orElseThrow(() -> new RuntimeException("Token not found"));
+    public QueuePosition updateQueuePosition(Long tokenId, int position) {
+        if (position < 1) {
+            throw new IllegalArgumentException("Position must be >= 1");
+        }
 
-    QueuePosition qp = new QueuePosition();
-    qp.setToken(token);
-    qp.setPosition(position);
+        Token token = tokenRepository.findById(tokenId)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
 
-    return queueRepo.save(qp);
+        QueuePosition qp = new QueuePosition();
+        qp.setToken(token);
+        qp.setPosition(position);
+
+        return queueRepo.save(qp);
+    }
+
+    public QueuePosition getPosition(Long tokenId) {
+        return queueRepo.findByToken_Id(tokenId)
+                .orElseThrow(() -> new RuntimeException("Position not found"));
+    }
 }

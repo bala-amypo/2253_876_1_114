@@ -53,7 +53,6 @@ import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.QueueService;
 
 import org.springframework.stereotype.Service;
-
 @Service
 public class QueueServiceImpl {
 
@@ -75,11 +74,11 @@ public class QueueServiceImpl {
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
-        QueuePosition qp = new QueuePosition();   // ✅ ALWAYS NEW
+        QueuePosition qp = new QueuePosition();
         qp.setToken(token);
         qp.setPosition(position);
 
-        return queueRepo.save(qp);                // ✅ NEVER NULL
+        return queueRepo.save(qp);
     }
 
     public QueuePosition getPosition(Long tokenId) {
@@ -87,4 +86,3 @@ public class QueueServiceImpl {
                 .orElseThrow(() -> new RuntimeException("Position not found"));
     }
 }
-

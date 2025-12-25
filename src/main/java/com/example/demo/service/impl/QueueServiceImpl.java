@@ -50,10 +50,12 @@ import com.example.demo.entity.QueuePosition;
 import com.example.demo.entity.Token;
 import com.example.demo.repository.QueuePositionRepository;
 import com.example.demo.repository.TokenRepository;
+import com.example.demo.service.QueueService;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class QueueServiceImpl {
+public class QueueServiceImpl implements QueueService {
 
     private final QueuePositionRepository queueRepo;
     private final TokenRepository tokenRepository;
@@ -64,6 +66,7 @@ public class QueueServiceImpl {
         this.tokenRepository = tokenRepository;
     }
 
+    @Override
     public QueuePosition updateQueuePosition(Long tokenId, int position) {
         if (position < 1) {
             throw new IllegalArgumentException("Position must be >= 1");
@@ -76,9 +79,10 @@ public class QueueServiceImpl {
         qp.setToken(token);
         qp.setPosition(position);
 
-        return queueRepo.save(qp); // REQUIRED
+        return queueRepo.save(qp);
     }
 
+    @Override
     public QueuePosition getPosition(Long tokenId) {
         return queueRepo.findByToken_Id(tokenId)
                 .orElseThrow(() -> new RuntimeException("Position not found"));

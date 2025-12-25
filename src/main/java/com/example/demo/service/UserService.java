@@ -6,6 +6,7 @@
 //     User registerUser(User user);
 //     User findByEmail(String email);
 // }
+
 package com.example.demo.service;
 
 import com.example.demo.entity.User;

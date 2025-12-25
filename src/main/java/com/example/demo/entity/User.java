@@ -42,6 +42,7 @@
 //     public void setRole(String role) { this.role = role; }
 // }
 
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

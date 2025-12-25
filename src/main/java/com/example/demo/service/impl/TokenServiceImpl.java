@@ -89,7 +89,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Service
 public class TokenServiceImpl {
 
@@ -120,25 +119,20 @@ public class TokenServiceImpl {
         List<Token> waiting =
                 tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(counterId, "WAITING");
 
-        if (waiting == null) {
-            waiting = new ArrayList<>();
-        }
-
-        // 🔴 MUST create object BEFORE save
-        Token token = new Token();
+        Token token = new Token();                // ✅ ALWAYS NEW
         token.setServiceCounter(counter);
         token.setStatus("WAITING");
         token.setIssuedAt(LocalDateTime.now());
         token.setTokenNumber(counter.getCounterName() + "-" + (waiting.size() + 1));
 
-        token = tokenRepository.save(token);
+        token = tokenRepository.save(token);      // ✅ NEVER NULL
 
-        QueuePosition qp = new QueuePosition();
+        QueuePosition qp = new QueuePosition();   // ✅ ALWAYS NEW
         qp.setToken(token);
         qp.setPosition(waiting.size() + 1);
         queueRepo.save(qp);
 
-        TokenLog log = new TokenLog();
+        TokenLog log = new TokenLog();             // ✅ ALWAYS NEW
         log.setToken(token);
         log.setMessage("Token issued");
         logRepo.save(log);
@@ -156,8 +150,7 @@ public class TokenServiceImpl {
         boolean valid =
                 (current.equals("WAITING") && newStatus.equals("SERVING")) ||
                 (current.equals("SERVING") && newStatus.equals("COMPLETED")) ||
-                ((current.equals("WAITING") || current.equals("SERVING"))
-                        && newStatus.equals("CANCELLED"));
+                ((current.equals("WAITING") || current.equals("SERVING")) && newStatus.equals("CANCELLED"));
 
         if (!valid) {
             throw new IllegalArgumentException("Invalid status");
@@ -169,9 +162,9 @@ public class TokenServiceImpl {
             token.setCompletedAt(LocalDateTime.now());
         }
 
-        token = tokenRepository.save(token);
+        token = tokenRepository.save(token);      // ✅ NEVER NULL
 
-        TokenLog log = new TokenLog();
+        TokenLog log = new TokenLog();             // ✅ ALWAYS NEW
         log.setToken(token);
         log.setMessage("Status changed to " + newStatus);
         logRepo.save(log);

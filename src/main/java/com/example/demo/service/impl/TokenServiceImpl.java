@@ -77,10 +77,12 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.*;
 import com.example.demo.repository.*;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class TokenServiceImpl {
 
     private final TokenRepository tokenRepository;
@@ -116,17 +118,17 @@ public class TokenServiceImpl {
         token.setIssuedAt(LocalDateTime.now());
         token.setTokenNumber(counter.getCounterName() + "-" + (waiting.size() + 1));
 
-        tokenRepository.save(token);
+        tokenRepository.save(token); // REQUIRED
 
         QueuePosition qp = new QueuePosition();
         qp.setToken(token);
         qp.setPosition(waiting.size() + 1);
-        queueRepo.save(qp);
+        queueRepo.save(qp); // REQUIRED
 
         TokenLog log = new TokenLog();
         log.setToken(token);
         log.setMessage("Token issued");
-        logRepo.save(log);
+        logRepo.save(log); // REQUIRED
 
         return token;
     }
@@ -144,7 +146,7 @@ public class TokenServiceImpl {
                 ((current.equals("WAITING") || current.equals("SERVING")) && newStatus.equals("CANCELLED"));
 
         if (!valid) {
-            throw new IllegalArgumentException("Invalid status transition");
+            throw new IllegalArgumentException("Invalid status");
         }
 
         token.setStatus(newStatus);
@@ -153,12 +155,12 @@ public class TokenServiceImpl {
             token.setCompletedAt(LocalDateTime.now());
         }
 
-        tokenRepository.save(token);
+        tokenRepository.save(token); // REQUIRED
 
         TokenLog log = new TokenLog();
         log.setToken(token);
         log.setMessage("Status changed to " + newStatus);
-        logRepo.save(log);
+        logRepo.save(log); // REQUIRED
 
         return token;
     }

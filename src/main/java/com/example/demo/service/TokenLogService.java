@@ -7,6 +7,8 @@
 //     TokenLog addLog(Long tokenId, String message);
 //     List<TokenLog> getLogs(Long tokenId);
 // }
+
+
 package com.example.demo.service;
 
 import com.example.demo.entity.TokenLog;

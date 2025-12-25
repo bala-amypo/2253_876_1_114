@@ -81,6 +81,8 @@ import com.example.demo.repository.TokenRepository;
 import com.example.demo.service.TokenLogService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TokenLogServiceImpl implements TokenLogService {
 
@@ -104,5 +106,10 @@ public class TokenLogServiceImpl implements TokenLogService {
         log.setMessage(message);
 
         return logRepo.save(log);
+    }
+
+    @Override
+    public List<TokenLog> getLogs(Long tokenId) {
+        return logRepo.findByToken_Id(tokenId);
     }
 }

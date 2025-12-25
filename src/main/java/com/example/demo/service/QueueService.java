@@ -36,4 +36,3 @@ public interface QueueService {
 
     QueuePosition getPosition(Long tokenId);
 }
-

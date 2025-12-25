@@ -205,7 +205,6 @@ public class QueueServiceImpl implements QueueService {
         return queueRepo.save(qp);
     }
 
-    // 🔴 THIS METHOD WAS MISSING — REQUIRED BY INTERFACE
     @Override
     public QueuePosition getPosition(Long tokenId) {
 

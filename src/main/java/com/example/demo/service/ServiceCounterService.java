@@ -7,6 +7,7 @@
 //     ServiceCounter addCounter(ServiceCounter counter);
 //     List<ServiceCounter> getActiveCounters();
 // }
+
 package com.example.demo.service;
 
 import com.example.demo.entity.ServiceCounter;

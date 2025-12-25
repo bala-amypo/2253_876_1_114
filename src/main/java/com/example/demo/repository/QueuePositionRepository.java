@@ -9,6 +9,7 @@
 
 //     Optional<QueuePosition> findByToken_Id(Long tokenId);
 // }
+
 package com.example.demo.repository;
 
 import com.example.demo.entity.QueuePosition;

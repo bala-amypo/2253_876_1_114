@@ -114,40 +114,57 @@
 //     }
 // }
 
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import com.example.demo.entity.Token;
+// import com.example.demo.entity.Token;
+// import com.example.demo.entity.TokenLog;
+// import com.example.demo.repository.TokenLogRepository;
+// import com.example.demo.repository.TokenRepository;
+// import org.springframework.stereotype.Service;
+
+// import java.util.List;
+
+// @Service
+// public class TokenLogServiceImpl {
+
+//     private final TokenLogRepository logRepo;
+//     private final TokenRepository tokenRepo;
+
+//     public TokenLogServiceImpl(TokenLogRepository logRepo, TokenRepository tokenRepo) {
+//         this.logRepo = logRepo;
+//         this.tokenRepo = tokenRepo;
+//     }
+
+//     public TokenLog addLog(Long tokenId, String message) {
+//         Token token = tokenRepo.findById(tokenId)
+//                 .orElseThrow(() -> new RuntimeException("Token not found"));
+
+//         TokenLog log = new TokenLog();
+//         log.setToken(token);
+//         log.setMessage(message);
+
+//         return logRepo.save(log);
+//     }
+
+//     public List<TokenLog> getLogs(Long tokenId) {
+//         return logRepo.findByToken_IdOrderByLoggedAtAsc(tokenId);
+//     }
+// }
+
+package com.example.demo.repository;
+
 import com.example.demo.entity.TokenLog;
-import com.example.demo.repository.TokenLogRepository;
-import com.example.demo.repository.TokenRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Service
-public class TokenLogServiceImpl {
+public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
 
-    private final TokenLogRepository logRepo;
-    private final TokenRepository tokenRepo;
+    List<TokenLog> findByToken_Id(Long tokenId);
 
-    public TokenLogServiceImpl(TokenLogRepository logRepo, TokenRepository tokenRepo) {
-        this.logRepo = logRepo;
-        this.tokenRepo = tokenRepo;
-    }
+    List<TokenLog> findByToken_IdOrderByLoggedAtAsc(Long tokenId);
 
-    public TokenLog addLog(Long tokenId, String message) {
-        Token token = tokenRepo.findById(tokenId)
-                .orElseThrow(() -> new RuntimeException("Token not found"));
+    List<TokenLog> findByToken_IdOrderByLoggedAtDesc(Long tokenId);
 
-        TokenLog log = new TokenLog();
-        log.setToken(token);
-        log.setMessage(message);
-
-        return logRepo.save(log);
-    }
-
-    public List<TokenLog> getLogs(Long tokenId) {
-        return logRepo.findByToken_IdOrderByLoggedAtAsc(tokenId);
-    }
+    List<TokenLog> findByToken_IdOrderByLoggedAt(Long tokenId);
 }
-

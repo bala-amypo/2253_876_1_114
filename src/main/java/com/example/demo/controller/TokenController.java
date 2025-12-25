@@ -39,60 +39,74 @@
 // }
 
 
+// package com.example.demo.controller;
+
+// import com.example.demo.entity.Token;
+// import com.example.demo.entity.TokenLog;
+// import com.example.demo.service.TokenService;
+// import com.example.demo.service.TokenLogService;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.*;
+// import java.util.List;
+
+// @RestController
+// @RequestMapping("/api/tokens")
+// public class TokenController {
+//     private final TokenService tokenService;
+//     private final TokenLogService logService;
+
+//     public TokenController(TokenService tokenService, TokenLogService logService) {
+//         this.tokenService = tokenService;
+//         this.logService = logService;
+//     }
+
+//     @PostMapping("/issue/{counterId}")
+//     public ResponseEntity<Token> issueToken(@PathVariable Long counterId) {
+//         Token token = tokenService.issueToken(counterId);
+//         return ResponseEntity.ok(token);
+//     }
+
+//     @PutMapping("/{tokenId}/status")
+//     public ResponseEntity<Token> updateStatus(@PathVariable Long tokenId, @RequestParam String status) {
+//         Token token = tokenService.updateStatus(tokenId, status);
+//         return ResponseEntity.ok(token);
+//     }
+
+//     @GetMapping("/{tokenId}")
+//     public ResponseEntity<Token> getToken(@PathVariable Long tokenId) {
+//         Token token = tokenService.getToken(tokenId);
+//         return ResponseEntity.ok(token);
+//     }
+
+//     @GetMapping("/{tokenId}/logs")
+//     public ResponseEntity<List<TokenLog>> getLogs(@PathVariable Long tokenId) {
+//         List<TokenLog> logs = logService.getLogs(tokenId);
+//         return ResponseEntity.ok(logs);
+//     }
+
+//     @PostMapping("/{tokenId}/logs")
+//     public ResponseEntity<TokenLog> addLog(@PathVariable Long tokenId, @RequestParam String message) {
+//         TokenLog log = logService.addLog(tokenId, message);
+//         return ResponseEntity.ok(log);
+//     }
+
+//     @GetMapping("/counter/{counterId}")
+//     public ResponseEntity<List<Token>> getTokensByCounter(@PathVariable Long counterId, @RequestParam(defaultValue = "WAITING") String status) {
+//         List<Token> tokens = tokenService.getTokensByCounter(counterId, status);
+//         return ResponseEntity.ok(tokens);
+//     }
+// }
+
 package com.example.demo.controller;
 
-import com.example.demo.entity.Token;
-import com.example.demo.entity.TokenLog;
-import com.example.demo.service.TokenService;
-import com.example.demo.service.TokenLogService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/tokens")
+@RequestMapping("/tokens")
 public class TokenController {
-    private final TokenService tokenService;
-    private final TokenLogService logService;
 
-    public TokenController(TokenService tokenService, TokenLogService logService) {
-        this.tokenService = tokenService;
-        this.logService = logService;
-    }
-
-    @PostMapping("/issue/{counterId}")
-    public ResponseEntity<Token> issueToken(@PathVariable Long counterId) {
-        Token token = tokenService.issueToken(counterId);
-        return ResponseEntity.ok(token);
-    }
-
-    @PutMapping("/{tokenId}/status")
-    public ResponseEntity<Token> updateStatus(@PathVariable Long tokenId, @RequestParam String status) {
-        Token token = tokenService.updateStatus(tokenId, status);
-        return ResponseEntity.ok(token);
-    }
-
-    @GetMapping("/{tokenId}")
-    public ResponseEntity<Token> getToken(@PathVariable Long tokenId) {
-        Token token = tokenService.getToken(tokenId);
-        return ResponseEntity.ok(token);
-    }
-
-    @GetMapping("/{tokenId}/logs")
-    public ResponseEntity<List<TokenLog>> getLogs(@PathVariable Long tokenId) {
-        List<TokenLog> logs = logService.getLogs(tokenId);
-        return ResponseEntity.ok(logs);
-    }
-
-    @PostMapping("/{tokenId}/logs")
-    public ResponseEntity<TokenLog> addLog(@PathVariable Long tokenId, @RequestParam String message) {
-        TokenLog log = logService.addLog(tokenId, message);
-        return ResponseEntity.ok(log);
-    }
-
-    @GetMapping("/counter/{counterId}")
-    public ResponseEntity<List<Token>> getTokensByCounter(@PathVariable Long counterId, @RequestParam(defaultValue = "WAITING") String status) {
-        List<Token> tokens = tokenService.getTokensByCounter(counterId, status);
-        return ResponseEntity.ok(tokens);
+    @GetMapping
+    public String tokens() {
+        return "tokens";
     }
 }

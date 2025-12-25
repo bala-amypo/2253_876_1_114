@@ -34,6 +34,7 @@
 //     // 🔴 REQUIRED BY TESTS & SERVICE
 //     List<TokenLog> findByToken_Id(Long tokenId);
 // }
+
 package com.example.demo.repository;
 
 import com.example.demo.entity.TokenLog;
@@ -43,10 +44,8 @@ import java.util.List;
 
 public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
 
-    // Used by services
     List<TokenLog> findByToken_Id(Long tokenId);
 
-    // Used by FullProjectTest (REQUIRED)
     List<TokenLog> findByToken_IdOrderByLoggedAtAsc(Long tokenId);
 
     List<TokenLog> findByToken_IdOrderByLoggedAtDesc(Long tokenId);

@@ -52,7 +52,6 @@
 
 //     List<TokenLog> findByToken_IdOrderByLoggedAt(Long tokenId);
 // }
-
 package com.example.demo.repository;
 
 import com.example.demo.entity.TokenLog;
@@ -70,6 +69,5 @@ public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
 
     List<TokenLog> findByToken_IdOrderByLoggedAt(Long tokenId);
 }
-
 
 

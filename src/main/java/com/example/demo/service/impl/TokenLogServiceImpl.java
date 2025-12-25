@@ -151,20 +151,57 @@
 //     }
 // }
 
-package com.example.demo.repository;
+// package com.example.demo.repository;
 
+// import com.example.demo.entity.TokenLog;
+// import org.springframework.data.jpa.repository.JpaRepository;
+
+// import java.util.List;
+
+// public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
+
+//     List<TokenLog> findByToken_Id(Long tokenId);
+
+//     List<TokenLog> findByToken_IdOrderByLoggedAtAsc(Long tokenId);
+
+//     List<TokenLog> findByToken_IdOrderByLoggedAtDesc(Long tokenId);
+
+//     List<TokenLog> findByToken_IdOrderByLoggedAt(Long tokenId);
+// }
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.Token;
 import com.example.demo.entity.TokenLog;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.repository.TokenLogRepository;
+import com.example.demo.repository.TokenRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
+@Service
+public class TokenLogServiceImpl {
 
-    List<TokenLog> findByToken_Id(Long tokenId);
+    private final TokenLogRepository logRepo;
+    private final TokenRepository tokenRepo;
 
-    List<TokenLog> findByToken_IdOrderByLoggedAtAsc(Long tokenId);
+    public TokenLogServiceImpl(TokenLogRepository logRepo,
+                               TokenRepository tokenRepo) {
+        this.logRepo = logRepo;
+        this.tokenRepo = tokenRepo;
+    }
 
-    List<TokenLog> findByToken_IdOrderByLoggedAtDesc(Long tokenId);
+    public TokenLog addLog(Long tokenId, String message) {
+        Token token = tokenRepo.findById(tokenId)
+                .orElseThrow(() -> new RuntimeException("Token not found"));
 
-    List<TokenLog> findByToken_IdOrderByLoggedAt(Long tokenId);
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setMessage(message);
+
+        return logRepo.save(log);
+    }
+
+    public List<TokenLog> getLogs(Long tokenId) {
+        return logRepo.findByToken_IdOrderByLoggedAtAsc(tokenId);
+    }
 }

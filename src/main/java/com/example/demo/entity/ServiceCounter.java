@@ -27,6 +27,7 @@
 //     public void setDepartment(String department) { this.department = department; }
 //     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 // }
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

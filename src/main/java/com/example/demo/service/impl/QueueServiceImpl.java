@@ -256,4 +256,3 @@ public class QueueServiceImpl implements QueueService {
                 .orElseThrow(() -> new RuntimeException("Queue position not found"));
     }
 }
-

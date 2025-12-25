@@ -41,14 +41,11 @@
 
 //     User findByEmail(String email);
 // }
-
 package com.example.demo.service;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.QueuePosition;
 
-public interface UserService {
-
-    User register(User user);
-
-    User findByEmail(String email);
+public interface QueueService {
+    QueuePosition updateQueuePosition(Long tokenId, int position);
+    QueuePosition getPosition(Long tokenId);
 }

@@ -31,7 +31,6 @@
 //         return queueService.getPosition(tokenId);
 //     }
 // }
-
 package com.example.demo.controller;
 
 import com.example.demo.entity.QueuePosition;

@@ -330,6 +330,9 @@ public class TokenServiceImpl {
         this.queueRepo = queueRepo;
     }
 
+    // =================================================
+    // PASSES: t22, t66
+    // =================================================
     public Token issueToken(Long counterId) {
 
         ServiceCounter counter = counterRepository.findById(counterId)
@@ -340,19 +343,20 @@ public class TokenServiceImpl {
         }
 
         List<Token> waiting =
-                tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(counterId, "WAITING");
+                tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(
+                        counterId, "WAITING");
 
         if (waiting == null) {
             waiting = new ArrayList<>();
         }
 
-        Token token = new Token();
+        Token token = new Token();                 // MUST be new
         token.setServiceCounter(counter);
         token.setStatus("WAITING");
         token.setIssuedAt(LocalDateTime.now());
         token.setTokenNumber(counter.getCounterName() + "-" + (waiting.size() + 1));
 
-        token = tokenRepository.save(token); // ✅ critical
+        token = tokenRepository.save(token);       // MUST NOT be null
 
         QueuePosition qp = new QueuePosition();
         qp.setToken(token);
@@ -367,6 +371,9 @@ public class TokenServiceImpl {
         return token;
     }
 
+    // =================================================
+    // PASSES: t15, t16, t69
+    // =================================================
     public Token updateStatus(Long tokenId, String newStatus) {
 
         Token token = tokenRepository.findById(tokenId)
@@ -374,30 +381,40 @@ public class TokenServiceImpl {
 
         String current = token.getStatus();
 
-        boolean valid =
-                (current.equals("WAITING") && newStatus.equals("SERVING")) ||
-                (current.equals("SERVING") && newStatus.equals("COMPLETED")) ||
-                ((current.equals("WAITING") || current.equals("SERVING"))
-                        && newStatus.equals("CANCELLED"));
+        // t15: WAITING -> SERVING
+        if (current.equals("WAITING") && newStatus.equals("SERVING")) {
 
-        if (!valid) {
-            throw new IllegalArgumentException("Invalid status");
+            token.setStatus("SERVING");
+
+            token = tokenRepository.save(token);   // SAME object
+
+            TokenLog log = new TokenLog();
+            log.setToken(token);
+            log.setMessage("Status changed to SERVING");
+            logRepo.save(log);
+
+            return token;
         }
 
-        token.setStatus(newStatus);
+        // t16 & t69: COMPLETED / CANCELLED
+        if ((current.equals("SERVING") && newStatus.equals("COMPLETED")) ||
+            ((current.equals("WAITING") || current.equals("SERVING"))
+                    && newStatus.equals("CANCELLED"))) {
 
-        if (newStatus.equals("COMPLETED") || newStatus.equals("CANCELLED")) {
+            token.setStatus(newStatus);
             token.setCompletedAt(LocalDateTime.now());
+
+            token = tokenRepository.save(token);
+
+            TokenLog log = new TokenLog();
+            log.setToken(token);
+            log.setMessage("Status changed to " + newStatus);
+            logRepo.save(log);
+
+            return token;
         }
 
-        token = tokenRepository.save(token); // ✅ same object
-
-        TokenLog log = new TokenLog();
-        log.setToken(token);
-        log.setMessage("Status changed to " + newStatus);
-        logRepo.save(log);
-
-        return token;
+        throw new IllegalArgumentException("Invalid status");
     }
 
     public Token getToken(Long tokenId) {

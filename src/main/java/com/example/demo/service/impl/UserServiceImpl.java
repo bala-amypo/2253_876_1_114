@@ -39,16 +39,14 @@
 //     }
 // }import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
-
-import java.util.Optional;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl {
 
     private final UserRepository userRepository;
@@ -59,8 +57,7 @@ public class UserServiceImpl {
     }
 
     public User register(User user) {
-        Optional<User> existing = userRepository.findByEmail(user.getEmail());
-        if (existing.isPresent()) {
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
         user.setPassword(encoder.encode(user.getPassword()));

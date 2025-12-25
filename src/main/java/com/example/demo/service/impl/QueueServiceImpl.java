@@ -50,7 +50,9 @@ import com.example.demo.entity.QueuePosition;
 import com.example.demo.entity.Token;
 import com.example.demo.repository.QueuePositionRepository;
 import com.example.demo.repository.TokenRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QueueServiceImpl {
 
     private final QueuePositionRepository queueRepo;
@@ -74,7 +76,7 @@ public class QueueServiceImpl {
         qp.setToken(token);
         qp.setPosition(position);
 
-        return queueRepo.save(qp);
+        return queueRepo.save(qp); // REQUIRED
     }
 
     public QueuePosition getPosition(Long tokenId) {

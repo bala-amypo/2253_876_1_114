@@ -24,14 +24,15 @@
 //         return repository.findByIsActiveTrue();
 //     }
 // }
-
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.ServiceCounter;
 import com.example.demo.repository.ServiceCounterRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ServiceCounterServiceImpl {
 
     private final ServiceCounterRepository counterRepository;
@@ -41,7 +42,7 @@ public class ServiceCounterServiceImpl {
     }
 
     public ServiceCounter addCounter(ServiceCounter counter) {
-        return counterRepository.save(counter);
+        return counterRepository.save(counter); // REQUIRED
     }
 
     public List<ServiceCounter> getActiveCounters() {

@@ -31,31 +31,20 @@
 //         return queueService.getPosition(tokenId);
 //     }
 // }
+
+
 package com.example.demo.controller;
 
-import com.example.demo.entity.QueuePosition;
 import com.example.demo.service.QueueService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/queue")
+@RequestMapping("/queue")
 public class QueueController {
+
     private final QueueService queueService;
 
     public QueueController(QueueService queueService) {
         this.queueService = queueService;
-    }
-
-    @PutMapping("/{tokenId}/position")
-    public ResponseEntity<QueuePosition> updatePosition(@PathVariable Long tokenId, @RequestParam Integer position) {
-        QueuePosition queuePosition = queueService.updateQueuePosition(tokenId, position);
-        return ResponseEntity.ok(queuePosition);
-    }
-
-    @GetMapping("/{tokenId}/position")
-    public ResponseEntity<QueuePosition> getPosition(@PathVariable Long tokenId) {
-        QueuePosition position = queueService.getPosition(tokenId);
-        return ResponseEntity.ok(position);
     }
 }

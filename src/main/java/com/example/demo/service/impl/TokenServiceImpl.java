@@ -89,6 +89,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Service
 public class TokenServiceImpl {
 
@@ -120,9 +121,10 @@ public class TokenServiceImpl {
                 tokenRepository.findByServiceCounter_IdAndStatusOrderByIssuedAtAsc(counterId, "WAITING");
 
         if (waiting == null) {
-            waiting = List.of();
+            waiting = new ArrayList<>();
         }
 
+        // 🔴 MUST create object BEFORE save
         Token token = new Token();
         token.setServiceCounter(counter);
         token.setStatus("WAITING");

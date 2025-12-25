@@ -30,5 +30,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TokenLogRepository extends JpaRepository<TokenLog, Long> {
-    List<TokenLog> findByToken_IdOrderByLoggedAtAsc(Long tokenId);
+
+    // 🔴 REQUIRED BY TESTS & SERVICE
+    List<TokenLog> findByToken_Id(Long tokenId);
 }

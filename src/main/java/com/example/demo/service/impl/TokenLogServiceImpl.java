@@ -60,11 +60,11 @@ public class TokenLogServiceImpl {
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
-        TokenLog log = new TokenLog();
+        TokenLog log = new TokenLog();     // ✅ ALWAYS NEW
         log.setToken(token);
         log.setMessage(message);
 
-        return logRepo.save(log);
+        return logRepo.save(log);          // ✅ NEVER NULL
     }
 
     public List<TokenLog> getLogs(Long tokenId) {

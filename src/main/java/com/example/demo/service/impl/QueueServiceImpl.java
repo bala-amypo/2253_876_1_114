@@ -74,11 +74,11 @@ public class QueueServiceImpl {
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
-        QueuePosition qp = new QueuePosition();
+        QueuePosition qp = new QueuePosition();   // ✅ ALWAYS NEW
         qp.setToken(token);
         qp.setPosition(position);
 
-        return queueRepo.save(qp);
+        return queueRepo.save(qp);                // ✅ NEVER NULL
     }
 
     public QueuePosition getPosition(Long tokenId) {

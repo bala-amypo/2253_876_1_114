@@ -31,7 +31,6 @@ import com.example.demo.repository.ServiceCounterRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class ServiceCounterServiceImpl {
 
@@ -42,7 +41,13 @@ public class ServiceCounterServiceImpl {
     }
 
     public ServiceCounter addCounter(ServiceCounter counter) {
-        return counterRepository.save(counter); // REQUIRED
+
+        if (counter == null) {
+            throw new IllegalArgumentException("Counter cannot be null");
+        }
+
+        // 🔴 NEVER save null
+        return counterRepository.save(counter);
     }
 
     public List<ServiceCounter> getActiveCounters() {

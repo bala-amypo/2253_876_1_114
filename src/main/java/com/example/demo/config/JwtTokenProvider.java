@@ -69,7 +69,6 @@
 //         return getClaims(token).getSubject();
 //     }
 // }
-
 package com.example.demo.config;
 
 import io.jsonwebtoken.*;

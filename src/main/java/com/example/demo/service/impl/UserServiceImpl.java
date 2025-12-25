@@ -57,11 +57,18 @@ public class UserServiceImpl {
     }
 
     public User register(User user) {
+
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
+
         user.setPassword(encoder.encode(user.getPassword()));
-        return userRepository.save(user);
+
+        return userRepository.save(user);   // ✅ NEVER NULL
     }
 
     public User findByEmail(String email) {

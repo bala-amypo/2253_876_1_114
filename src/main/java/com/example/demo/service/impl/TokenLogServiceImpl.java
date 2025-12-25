@@ -43,7 +43,6 @@ import com.example.demo.repository.TokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class TokenLogServiceImpl {
 
@@ -57,14 +56,15 @@ public class TokenLogServiceImpl {
     }
 
     public TokenLog addLog(Long tokenId, String message) {
+
         Token token = tokenRepository.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("Token not found"));
 
-        TokenLog log = new TokenLog();
+        TokenLog log = new TokenLog();     // ✅ ALWAYS NEW
         log.setToken(token);
         log.setMessage(message);
 
-        return logRepo.save(log); // REQUIRED
+        return logRepo.save(log);          // ✅ NEVER NULL
     }
 
     public List<TokenLog> getLogs(Long tokenId) {

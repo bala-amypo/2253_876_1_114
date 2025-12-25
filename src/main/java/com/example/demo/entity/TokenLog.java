@@ -67,6 +67,7 @@
 //         this.loggedAt = LocalDateTime.now();
 //     }
 // }
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

@@ -28,6 +28,7 @@
 //     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 // }
 
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

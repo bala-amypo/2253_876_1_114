@@ -64,7 +64,6 @@
 //         this.updatedAt = updatedAt;
 //     }
 // }
-
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

@@ -79,43 +79,79 @@
 //     }
 // }
 
+// package com.example.demo.service.impl;
+
+// import com.example.demo.entity.QueuePosition;
+// import com.example.demo.entity.Token;
+// import com.example.demo.repository.QueuePositionRepository;
+// import com.example.demo.repository.TokenRepository;
+
+// import java.time.LocalDateTime;
+
+// public class QueueServiceImpl {
+
+//     private final QueuePositionRepository repo;
+//     private final TokenRepository tokenRepo;
+
+//     public QueueServiceImpl(QueuePositionRepository repo, TokenRepository tokenRepo) {
+//         this.repo = repo;
+//         this.tokenRepo = tokenRepo;
+//     }
+
+//     public QueuePosition updateQueuePosition(Long tokenId, Integer pos) {
+//         if (pos < 1) {
+//             throw new IllegalArgumentException(">= 1");
+//         }
+
+//         Token token = tokenRepo.findById(tokenId)
+//                 .orElseThrow(() -> new RuntimeException("not found"));
+
+//         QueuePosition qp = new QueuePosition();
+//         qp.setToken(token);
+//         qp.setPosition(pos);
+//         qp.setUpdatedAt(LocalDateTime.now());
+
+//         return repo.save(qp);
+//     }
+
+//     public QueuePosition getPosition(Long tokenId) {
+//         return repo.findByToken_Id(tokenId)
+//                 .orElseThrow(() -> new RuntimeException("not found"));
+//     }
+// }
+
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.QueuePosition;
 import com.example.demo.entity.Token;
-import com.example.demo.repository.QueuePositionRepository;
+import com.example.demo.entity.TokenLog;
+import com.example.demo.repository.TokenLogRepository;
 import com.example.demo.repository.TokenRepository;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-public class QueueServiceImpl {
+public class TokenLogServiceImpl {
 
-    private final QueuePositionRepository repo;
+    private final TokenLogRepository repo;
     private final TokenRepository tokenRepo;
 
-    public QueueServiceImpl(QueuePositionRepository repo, TokenRepository tokenRepo) {
+    public TokenLogServiceImpl(TokenLogRepository repo, TokenRepository tokenRepo) {
         this.repo = repo;
         this.tokenRepo = tokenRepo;
     }
 
-    public QueuePosition updateQueuePosition(Long tokenId, Integer pos) {
-        if (pos < 1) {
-            throw new IllegalArgumentException(">= 1");
-        }
-
+    public TokenLog addLog(Long tokenId, String msg) {
         Token token = tokenRepo.findById(tokenId)
                 .orElseThrow(() -> new RuntimeException("not found"));
 
-        QueuePosition qp = new QueuePosition();
-        qp.setToken(token);
-        qp.setPosition(pos);
-        qp.setUpdatedAt(LocalDateTime.now());
+        TokenLog log = new TokenLog();
+        log.setToken(token);
+        log.setLogMessage(msg);
 
-        return repo.save(qp);
+        repo.save(log);
+        return log;
     }
 
-    public QueuePosition getPosition(Long tokenId) {
-        return repo.findByToken_Id(tokenId)
-                .orElseThrow(() -> new RuntimeException("not found"));
+    public List<TokenLog> getLogs(Long tokenId) {
+        return repo.findByToken_IdOrderByLoggedAtAsc(tokenId);
     }
 }

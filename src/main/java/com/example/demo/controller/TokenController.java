@@ -99,14 +99,31 @@
 
 package com.example.demo.controller;
 
+import com.example.demo.entity.Token;
+import com.example.demo.service.impl.TokenServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tokens")
 public class TokenController {
-
-    @GetMapping
-    public String tokens() {
-        return "tokens";
+    private final TokenServiceImpl tokenService;
+    
+    public TokenController(TokenServiceImpl tokenService) {
+        this.tokenService = tokenService;
+    }
+    
+    @PostMapping("/issue/{counterId}")
+    public Token issueToken(@PathVariable Long counterId) {
+        return tokenService.issueToken(counterId);
+    }
+    
+    @PutMapping("/status/{tokenId}")
+    public Token updateStatus(@PathVariable Long tokenId, @RequestBody String status) {
+        return tokenService.updateStatus(tokenId, status);
+    }
+    
+    @GetMapping("/{tokenId}")
+    public Token getToken(@PathVariable Long tokenId) {
+        return tokenService.getToken(tokenId);
     }
 }

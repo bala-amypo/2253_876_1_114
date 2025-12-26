@@ -116,14 +116,26 @@
 // }
 package com.example.demo.controller;
 
+import com.example.demo.entity.User;
+import com.example.demo.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
+    private final UserServiceImpl userService;
+    
+    public AuthController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+    
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.register(user);
+    }
+    
     @PostMapping("/login")
-    public String login() {
-        return "ok";
+    public String login(@RequestBody User user) {
+        return "token";
     }
 }

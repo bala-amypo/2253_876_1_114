@@ -144,7 +144,6 @@ package com.example.demo.controller;
 
 import com.example.demo.config.JwtTokenProvider;
 import com.example.demo.entity.User;
-import org.springframework.context.annotation.Bean;
 import com.example.demo.service.impl.UserServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -156,7 +155,7 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     
-    @Bean
+    
     public AuthController(UserServiceImpl userService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;

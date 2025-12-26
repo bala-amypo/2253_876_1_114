@@ -18,6 +18,9 @@
 //     List<ServiceCounter> getActiveCounters();
 //     ServiceCounter getById(Long id);
 // }
+
+
+
 package com.example.demo.service;
 
 import com.example.demo.entity.ServiceCounter;

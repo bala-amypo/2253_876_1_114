@@ -1,14 +1,14 @@
-// // package com.example.demo.repository;
+package com.example.demo.repository;
 
-// // import com.example.demo.entity.ServiceCounter;
-// // import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.demo.entity.ServiceCounter;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-// // import java.util.List;
+import java.util.List;
 
-// // public interface ServiceCounterRepository extends JpaRepository<ServiceCounter, Long> {
+public interface ServiceCounterRepository extends JpaRepository<ServiceCounter, Long> {
 
-// //     List<ServiceCounter> findByIsActiveTrue();
-// // }
+    List<ServiceCounter> findByIsActiveTrue();
+}
 
 // // package com.example.demo.repository;
 
@@ -33,13 +33,3 @@
 //     List<ServiceCounter> findByIsActiveTrue();
 // }
 
-
-package com.example.demo.repository;
-
-import com.example.demo.entity.ServiceCounter;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
-
-public interface ServiceCounterRepository extends JpaRepository<ServiceCounter, Long> {
-    List<ServiceCounter> findByIsActiveTrue();
-}

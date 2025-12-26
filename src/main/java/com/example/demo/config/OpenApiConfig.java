@@ -67,7 +67,14 @@
 //         return http.build();
 //     }
 // }
-package com.example.demo.config;
+// package com.example.demo.config;
+// package com.example.demo.config;
+
+// import org.springframework.context.annotation.Configuration;
+
+// @Configuration
+// public class OpenApiConfig {
+// }
 package com.example.demo.config;
 
 import org.springframework.context.annotation.Configuration;

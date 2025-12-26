@@ -1,11 +1,13 @@
-// package com.example.demo.service;
+package com.example.demo.service;
 
-// import com.example.demo.entity.QueuePosition;
+import com.example.demo.entity.QueuePosition;
 
-// public interface QueueService {
-//     QueuePosition updateQueuePosition(Long tokenId, Integer newPosition);
-//     QueuePosition getPosition(Long tokenId);
-// }
+public interface QueueService {
+    QueuePosition updateQueuePosition(Long tokenId, Integer newPosition);
+    QueuePosition getPosition(Long tokenId);
+}
+
+
 
 // package com.example.demo.service;
 
@@ -55,12 +57,3 @@
 // public interface QueueService {
 //     QueuePosition getPosition(Long tokenId);
 // }
-
-package com.example.demo.service;
-
-import com.example.demo.entity.QueuePosition;
-
-public interface QueueService {
-    QueuePosition updateQueuePosition(Long tokenId, Integer position);
-    QueuePosition getPosition(Long tokenId);
-}

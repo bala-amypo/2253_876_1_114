@@ -169,6 +169,7 @@
 //     public ServiceCounter getServiceCounter() { return serviceCounter; }
 //     public void setServiceCounter(ServiceCounter serviceCounter) { this.serviceCounter = serviceCounter; }
 // }
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;

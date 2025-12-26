@@ -59,5 +59,3 @@ public class TokenLogController {
         return logService.getLogs(tokenId);
     }
 }
-
-

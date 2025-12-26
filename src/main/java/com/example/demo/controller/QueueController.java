@@ -25,13 +25,39 @@
 //         return queueService.updateQueuePosition(tokenId, newPosition);
 //     }
 
+// //     @GetMapping("/position/{tokenId}")
+// //     @Operation(summary = "Get queue position")
+// //     public QueuePosition getPosition(@PathVariable Long tokenId) {
+// //         return queueService.getPosition(tokenId);
+// //     }
+// // }
+
+
+// package com.example.demo.controller;
+
+// import com.example.demo.entity.QueuePosition;
+// import com.example.demo.service.impl.QueueServiceImpl;
+// import org.springframework.web.bind.annotation.*;
+
+// @RestController
+// @RequestMapping("/queue")
+// public class QueueController {
+//     private final QueueServiceImpl queueService;
+    
+//     public QueueController(QueueServiceImpl queueService) {
+//         this.queueService = queueService;
+//     }
+    
+//     @PutMapping("/position/{tokenId}/{newPosition}")
+//     public QueuePosition updatePosition(@PathVariable Long tokenId, @PathVariable Integer newPosition) {
+//         return queueService.updateQueuePosition(tokenId, newPosition);
+//     }
+    
 //     @GetMapping("/position/{tokenId}")
-//     @Operation(summary = "Get queue position")
 //     public QueuePosition getPosition(@PathVariable Long tokenId) {
 //         return queueService.getPosition(tokenId);
 //     }
 // }
-
 
 package com.example.demo.controller;
 

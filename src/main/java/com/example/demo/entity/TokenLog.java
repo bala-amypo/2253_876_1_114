@@ -68,7 +68,6 @@
 //     }
 // }
 
-
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -87,6 +86,15 @@ public class TokenLog {
     private String logMessage;
 
     private LocalDateTime loggedAt = LocalDateTime.now();
+
+    public TokenLog() {
+    }
+
+    public TokenLog(Token token, String logMessage, LocalDateTime loggedAt) {
+        this.token = token;
+        this.logMessage = logMessage;
+        this.loggedAt = loggedAt;
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

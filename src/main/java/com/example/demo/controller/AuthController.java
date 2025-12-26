@@ -34,38 +34,39 @@ public class AuthController {
 
         User user = new User(
                 request.getName(),
-//                 request.getEmail(),
-//                 passwordEncoder.encode(request.getPassword()), // ✅ encode here
-//                 request.getRole()
-//         );
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()), // ✅ encode here
+                request.getRole()
+        );
 
-//         return userService.registerUser(user);
-//     }
+        return userService.registerUser(user);
+    }
 
-//     @PostMapping("/login")
-//     @Operation(summary = "Login user")
-//     public AuthResponse login(@RequestBody AuthRequest request) {
+    @PostMapping("/login")
+    @Operation(summary = "Login user")
+    public AuthResponse login(@RequestBody AuthRequest request) {
 
-//         User user = userService.findByEmail(request.getEmail());
+        User user = userService.findByEmail(request.getEmail());
 
-//         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-//             throw new IllegalArgumentException("Invalid credentials");
-//         }
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
 
-//         String token = jwtTokenProvider.generateToken(
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
+        String token = jwtTokenProvider.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
 
-//         return new AuthResponse(
-//                 token,
-//                 user.getId(),
-//                 user.getEmail(),
-//                 user.getRole()
-//         );
-//     }
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
 }
+
 // // // package com.example.demo.controller;
 
 // // // import com.example.demo.config.JwtTokenProvider;

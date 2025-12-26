@@ -40,3 +40,4 @@ public interface TokenLogService {
     TokenLog addLog(Long tokenId, String message);
     List<TokenLog> getLogs(Long tokenId);
 }
+

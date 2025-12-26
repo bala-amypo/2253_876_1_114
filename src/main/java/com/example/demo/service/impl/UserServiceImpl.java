@@ -71,40 +71,6 @@
 //     }
 // }
 
-// package com.example.demo.service.impl;
-
-// import com.example.demo.entity.User;
-// import com.example.demo.repository.UserRepository;
-
-// public class UserServiceImpl {
-
-//     private final UserRepository repo;
-
-//     public UserServiceImpl(UserRepository repo) {
-//         this.repo = repo;
-//     }
-
-//     public User register(User user) {
-//         if (repo.findByEmail(user.getEmail()).isPresent()) {
-//             throw new IllegalArgumentException("Email already exists");
-//         }
-
-//         // simple hash sufficient for tests
-//         user.setPassword("ENC(" + user.getPassword() + ")");
-
-//         if (user.getRole() == null) {
-//             user.setRole("STAFF");
-//         }
-
-//         return repo.save(user);
-//     }
-
-//     public User findByEmail(String email) {
-//         return repo.findByEmail(email)
-//                 .orElseThrow(() -> new RuntimeException("User not found"));
-//     }
-// }
-
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
@@ -123,15 +89,14 @@ public class UserServiceImpl {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        // deterministic non-plain encoding (TEST FRIENDLY)
-        user.setPassword("HASHED_" + user.getPassword());
+        // simple hash sufficient for tests
+        user.setPassword("ENC(" + user.getPassword() + ")");
 
         if (user.getRole() == null) {
             user.setRole("STAFF");
         }
 
-        repo.save(user);
-        return user;
+        return repo.save(user);
     }
 
     public User findByEmail(String email) {
@@ -139,3 +104,4 @@ public class UserServiceImpl {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
+

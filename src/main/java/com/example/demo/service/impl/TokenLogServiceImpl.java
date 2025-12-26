@@ -96,11 +96,11 @@ public class TokenLogServiceImpl {
         log.setToken(token);
         log.setLogMessage(msg);
 
-        return repo.save(log);
+        repo.save(log);
+        return log;
     }
 
     public List<TokenLog> getLogs(Long tokenId) {
         return repo.findByToken_IdOrderByLoggedAtAsc(tokenId);
     }
 }
-

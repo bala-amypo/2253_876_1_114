@@ -123,7 +123,6 @@ public class QueueController {
         QueuePosition position = queueService.getPosition(tokenId);
         return mapToResponse(position);
     }
-
     private QueuePositionResponse mapToResponse(QueuePosition position) {
         QueuePositionResponse response = new QueuePositionResponse();
         response.setTokenId(position.getToken().getId());

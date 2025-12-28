@@ -180,7 +180,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.JwtTokenProvider;
-import com.example.demo.entity.User;
+import com.example.demo.controller.AuthRequest;
+import com.example.demo.controller.AuthResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

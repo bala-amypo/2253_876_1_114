@@ -1,38 +1,73 @@
+// // package com.example.demo.service.impl;
+
+// // import com.example.demo.entity.Token;
+// // import com.example.demo.entity.TokenLog;
+// // import com.example.demo.exception.ResourceNotFoundException;
+// // import com.example.demo.repository.TokenLogRepository;
+// // import com.example.demo.repository.TokenRepository;
+// // import com.example.demo.service.TokenLogService;
+// // import org.springframework.stereotype.Service;
+
+// // import java.util.List;
+
+// // @Service
+// // public class TokenLogServiceImpl implements TokenLogService {
+
+// //     private final TokenLogRepository logRepository;
+// //     private final TokenRepository tokenRepository;
+
+// //     public TokenLogServiceImpl(TokenLogRepository logRepository,
+// //                                TokenRepository tokenRepository) {
+// //         this.logRepository = logRepository;
+// //         this.tokenRepository = tokenRepository;
+// //     }
+
+// //     public TokenLog addLog(Long tokenId, String message) {
+// //         Token token = tokenRepository.findById(tokenId)
+// //                 .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+
+// //         return logRepository.save(new TokenLog(token, message));
+// //     }
+
+// //     public List<TokenLog> getLogs(Long tokenId) {
+// //         return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
+// //     }
+// //  }
+
 // package com.example.demo.service.impl;
 
 // import com.example.demo.entity.Token;
 // import com.example.demo.entity.TokenLog;
-// import com.example.demo.exception.ResourceNotFoundException;
 // import com.example.demo.repository.TokenLogRepository;
 // import com.example.demo.repository.TokenRepository;
-// import com.example.demo.service.TokenLogService;
-// import org.springframework.stereotype.Service;
 
 // import java.util.List;
 
-// @Service
-// public class TokenLogServiceImpl implements TokenLogService {
+// public class TokenLogServiceImpl {
 
-//     private final TokenLogRepository logRepository;
-//     private final TokenRepository tokenRepository;
+//     private final TokenLogRepository logRepo;
+//     private final TokenRepository tokenRepo;
 
-//     public TokenLogServiceImpl(TokenLogRepository logRepository,
-//                                TokenRepository tokenRepository) {
-//         this.logRepository = logRepository;
-//         this.tokenRepository = tokenRepository;
+//     public TokenLogServiceImpl(TokenLogRepository logRepo, TokenRepository tokenRepo) {
+//         this.logRepo = logRepo;
+//         this.tokenRepo = tokenRepo;
 //     }
 
 //     public TokenLog addLog(Long tokenId, String message) {
-//         Token token = tokenRepository.findById(tokenId)
-//                 .orElseThrow(() -> new ResourceNotFoundException("Token not found"));
+//         Token token = tokenRepo.findById(tokenId)
+//                 .orElseThrow(() -> new RuntimeException("not found"));
 
-//         return logRepository.save(new TokenLog(token, message));
+//         TokenLog log = new TokenLog();
+//         log.setToken(token);
+//         log.setLogMessage(message);
+
+//         return logRepo.save(log);
 //     }
 
 //     public List<TokenLog> getLogs(Long tokenId) {
-//         return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
+//         return logRepo.findByToken_IdOrderByLoggedAtAsc(tokenId);
 //     }
-//  }
+// }
 
 package com.example.demo.service.impl;
 
@@ -40,32 +75,31 @@ import com.example.demo.entity.Token;
 import com.example.demo.entity.TokenLog;
 import com.example.demo.repository.TokenLogRepository;
 import com.example.demo.repository.TokenRepository;
-
+import com.example.demo.service.TokenLogService;
+import org.springframework.stereotype.Service;
 import java.util.List;
 
-public class TokenLogServiceImpl {
+@Service
+public class TokenLogServiceImpl implements TokenLogService {
+    private final TokenLogRepository logRepository;
+    private final TokenRepository tokenRepository;
 
-    private final TokenLogRepository logRepo;
-    private final TokenRepository tokenRepo;
-
-    public TokenLogServiceImpl(TokenLogRepository logRepo, TokenRepository tokenRepo) {
-        this.logRepo = logRepo;
-        this.tokenRepo = tokenRepo;
+    public TokenLogServiceImpl(TokenLogRepository logRepository, TokenRepository tokenRepository) {
+        this.logRepository = logRepository;
+        this.tokenRepository = tokenRepository;
     }
 
+    @Override
     public TokenLog addLog(Long tokenId, String message) {
-        Token token = tokenRepo.findById(tokenId)
-                .orElseThrow(() -> new RuntimeException("not found"));
-
+        Token token = tokenRepository.findById(tokenId).orElse(null);
         TokenLog log = new TokenLog();
         log.setToken(token);
-        log.setLogMessage(message);
-
-        return logRepo.save(log);
+        log.setMessage(message);
+        return logRepository.save(log);
     }
 
+    @Override
     public List<TokenLog> getLogs(Long tokenId) {
-        return logRepo.findByToken_IdOrderByLoggedAtAsc(tokenId);
+        return logRepository.findByToken_IdOrderByLoggedAtAsc(tokenId);
     }
 }
-

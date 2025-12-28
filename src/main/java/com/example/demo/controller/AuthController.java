@@ -180,12 +180,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.config.JwtTokenProvider;
+import com.example.demo.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -201,7 +200,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginRequest request) {
+    public AuthResponse login(@RequestBody AuthRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -210,7 +209,7 @@ public class AuthController {
                 )
         );
 
-        // 🔹 Example values (replace with DB values later)
+        // 🔹 TEMPORARY (replace with DB lookup)
         Long userId = 1L;
         String role = "ROLE_USER";
 
@@ -220,6 +219,6 @@ public class AuthController {
                 role
         );
 
-        return Map.of("token", token);
+        return new AuthResponse(token);
     }
 }

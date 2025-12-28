@@ -106,15 +106,14 @@ import java.util.Map;
 @Component
 public class JwtTokenProvider {
 
-    // ✅ Must be at least 32 characters
     private static final String SECRET_KEY =
-            "mysecretkeymysecretkeymysecretkey12345";
+            "mysecretkeymysecretkeymysecretkey12345"; // 32+ chars
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 hours
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24h
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    // ✅ THIS METHOD WAS MISSING (CAUSE OF YOUR ERROR)
+    // ✅ MUST MATCH CONTROLLER CALL
     public String generateToken(Long userId, String username, String role) {
 
         Map<String, Object> claims = new HashMap<>();
@@ -122,8 +121,8 @@ public class JwtTokenProvider {
         claims.put("role", role);
 
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -132,10 +131,6 @@ public class JwtTokenProvider {
 
     public String getUsername(String token) {
         return getClaims(token).getSubject();
-    }
-
-    public String getRole(String token) {
-        return getClaims(token).get("role", String.class);
     }
 
     public boolean validateToken(String token) {

@@ -186,7 +186,7 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server().url("https://9143.32procr.amypo.ai/")
                 ))
-                // 🔐 Enable Authorize button
+              
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))
                 .components(
                         new Components()
